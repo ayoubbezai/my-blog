@@ -64,6 +64,16 @@ export function AuthProvider({ children }) {
         setBlogs(blogs)
     }
 
+    const [users, setUsers] = useState([])
+
+    const getAllUsers = async () => {
+        const dataRef = collection(db, "users")
+        const data = await getDocs(dataRef)
+        const users = data.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+        setUsers(users)
+    }
+
+
 
     const value = {
         currentUser,
@@ -78,6 +88,8 @@ export function AuthProvider({ children }) {
         getName,
         blogs,
         getAllBlog,
+        users,
+        getAllUsers,
     }
     return (
 

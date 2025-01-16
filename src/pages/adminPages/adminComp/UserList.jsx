@@ -45,13 +45,16 @@ const UserList = () => {
             <h1 className="text-4xl font-bold text-center text-secondary my-4">User List</h1>
             <div className="flex flex-col gap-4 p-12">
             <table className="w-full">
+                <thead>
                             <tr className="">
                                 <td className="text-white font-bold py-2">Name</td>
                                 <td className="text-white font-bold py-2">Email</td>
                                 <td className="text-white font-bold py-2">Role</td>
                                 <td className="text-white font-bold py-2 text-center">Action</td>
                             </tr>
+                </thead>
 
+                <tbody>
                 {users.map(user => (
                             <tr key={user.id} className=" ">
                                 <td className="py-2 text-white  "> {user.name}</td>
@@ -64,6 +67,7 @@ const UserList = () => {
 
                             </tr>
                 ))}
+                </tbody>
             </table>
             </div>
         </div>

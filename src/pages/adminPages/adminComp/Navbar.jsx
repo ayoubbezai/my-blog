@@ -32,9 +32,10 @@ const NavBar = ({ hoverd }) => {
             </div>
             <div className="hidden md:flex items-center gap-6 ml-12">
                 <ul className="flex items-center gap-6 ">
-                    <Link to="/dashboard" className={`text-sm font-bold text-center text-white hover:text-secondary ${hoverd === 1 ? "text-secondary " : ""} `}>Dashboard</Link>
-                    <Link to="/profile" className={`text-sm font-bold text-center text-white hover:text-secondary ${hoverd === 2 ? "text-secondary" : ""}`}>Profile</Link>
-                    <Link to="/blogsedit" className={`text-sm font-bold text-center text-white hover:text-secondary ${hoverd === 3 ? "text-secondary" : ""}`}>Blogs Edit</Link>
+                    <Link to="/dashboard" className={`text-sm font-bold text-center  hover:text-secondary ${hoverd === 1 ? "text-secondary " : ""} `}>Dashboard</Link>
+                    <Link to="/blogsedit" className={`text-sm font-bold text-center  hover:text-secondary ${hoverd === 2 ? "text-secondary" : ""}`}>Blogs Edit</Link>
+                    <Link to="/profile" className={`text-sm font-bold text-center  hover:text-secondary ${hoverd === 3 ? "text-secondary" : ""}`}>Profile</Link>
+                
                 </ul>
             </div>
             <div className="flex items-center gap-2">

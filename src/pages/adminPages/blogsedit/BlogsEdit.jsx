@@ -4,7 +4,7 @@ import EditBlog from "../adminComp/EditBlog"
 const BlogsEdit = () => {
     return (
         <div className="bg-primary">
-            <Navbar hoverd={3} />
+            <Navbar hoverd={2} />
             <AddBlog />
             <EditBlog />
         </div>

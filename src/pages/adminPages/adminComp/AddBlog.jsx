@@ -4,7 +4,6 @@ import { addDoc, collection } from "firebase/firestore"
 import { useAuth } from "../../../context/AuthContext"
 import { useState, useEffect } from "react"
 
-
 const AddBlog = () => {
 
     const titleRef = useRef("")
@@ -51,6 +50,7 @@ const AddBlog = () => {
                 <input type="text" placeholder="Title" className="w-full p-2 rounded-md border-2 " ref={titleRef} required />
                 <input type="text" placeholder="Description" className="w-full p-2 rounded-md border-2 " ref={descRef} required />
                 <textarea type="text" placeholder="big description" className="w-full p-2 rounded-md border-2   " ref={bigDescRef} required />
+
 
                 <button className="bg-secondary text-white p-2 rounded-md text-center font-bold" type="submit" disabled={loading}>{loading ? "Loading..." : "Add Blog"}</button>
             </form>

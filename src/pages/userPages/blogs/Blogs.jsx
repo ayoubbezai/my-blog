@@ -1,9 +1,9 @@
-import Navbar from "../userComp/Navbar"
+import NavBar from "../userComp/NavBar"
 import AllBlogs from "../userComp/AllBlogs"
 const Blogs = () => {
   return (
     <div className="bg-primary">
-      <Navbar hoverd={3} />
+      <NavBar hoverd={2} />
       <AllBlogs />
     </div>
   )

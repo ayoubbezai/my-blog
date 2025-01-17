@@ -3,7 +3,7 @@ import Navbar from "../adminComp/Navbar"
 import EditBlog from "../adminComp/EditBlog"
 const BlogsEdit = () => {
     return (
-        <div className="bg-primary">
+        <div className="bg-gradient-to-r from-primary to-secondary">
             <Navbar hoverd={2} />
             <AddBlog />
             <EditBlog />

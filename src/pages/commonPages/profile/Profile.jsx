@@ -37,11 +37,10 @@ const Profile = () => {
         setUserData({ ...userData, name: name })
         nameRef.current.value = ""
         alert("Name updated successfully")
-        fetchUserData()
     }
 
     return (
-        <div className="bg-primary min-h-screen">
+        <div className="bg-gradient-to-r from-primary to-secondary min-h-screen">
             {userData.role === "admin" && (
                 <NavbarAdmin hoverd={3} />
             )}
@@ -59,7 +58,7 @@ const Profile = () => {
 
                         <button
                             onClick={handleLogout}
-                            className="bg-primary text-white px-6 py-2 rounded-md text-lg font-semibold mt-4 transition-all hover:bg-primary-dark"
+                            className=" bg-secondary text-white px-6 py-2 rounded-md text-lg font-semibold mt-4 transition-all md:hover:scale-105"
                         >
                             Logout
                         </button>
@@ -74,8 +73,7 @@ const Profile = () => {
                                     ref={nameRef}
                                 />
                                 <button
-                                    className="bg-primary text-white px-6 py-2 rounded-md text-lg font-semibold w-24"
-                                    type="submit"
+                                    className=" bg-primary text-white px-6 py-2 rounded-md text-lg font-semibold transition-all md:hover:scale-105" type="submit"
                                 >
                                     Update
                                 </button>

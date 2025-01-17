@@ -1,20 +1,24 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
 const Home = () => {
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-            <h1 className="text-4xl font-bold text-gray-800 mb-6">Welcome to Home</h1>
-            <div className="flex space-x-4">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-primary to-secondary px-4 sm:px-6 md:px-8">
+            <h1 className="text-5xl font-extrabold text-white mb-8 text-center">
+                Welcome to Our Blog Platform
+            </h1>
+            <p className="text-lg text-white mb-8 text-center max-w-lg">
+                Explore the latest blog posts, learn new things, and stay updated with the best content. Start by either logging in or signing up!
+            </p>
+            <div className="flex space-x-4 mt-6">
                 <Link
                     to="/signup"
-                    className="px-6 py-3 text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    className="px-8 py-3 text-white bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform transition-all duration-300 hover:scale-105"
                 >
                     Signup
                 </Link>
                 <Link
                     to="/login"
-                    className="px-6 py-3 text-white bg-green-600 rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                    className="px-8 py-3 text-white bg-green-600 rounded-lg shadow-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transform transition-all duration-300 hover:scale-105"
                 >
                     Login
                 </Link>

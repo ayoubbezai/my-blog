@@ -10,6 +10,7 @@ import ProtectedRouteUser from "./utils/ProtectedUser";
 import ProtectedRouteAdmin from "./utils/ProtectedAdmin";
 import BlogsEdit from "./pages/adminPages/blogsedit/BlogsEdit";
 import Profile from "./pages/commonPages/profile/Profile";
+import BlogDetails from "./pages/userPages/blogDetails/BlogDetails"
 function App() {
   return (
     < Router >
@@ -18,18 +19,23 @@ function App() {
           <Route exact path="/" element={<Home />} />
           <Route path="signup" element={<Signup />} />
           <Route path="login" element={<Login />} />
+
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
 
+
           </Route>
           <Route element={<ProtectedRouteUser />}>
             <Route path="/blogs" element={<Blogs />} />
+            <Route path="/blog/:id" element={<BlogDetails />} />
+
           </Route>
           <Route element={<ProtectedRouteAdmin />}>
             <Route path="/blogsedit" element={<BlogsEdit />} />
 
           </Route>
+
         </Routes>
       </AuthProvider>
 

@@ -14,13 +14,14 @@ const Profile = () => {
     const nameRef = useRef("")
 
     const collectionRef = collection(db, "users")
+    const fetchUserData = async () => {
+        setUserData({ name: "", email: "", role: "" })
+        const userDoc = await getDoc(doc(collectionRef, currentUser.uid))
+        console.log(userDoc.data())
+        setUserData(userDoc.data())
+    }
     useEffect(() => {
-        const fetchUserData = async () => {
-            setUserData({ name: "", email: "", role: "" })
-            const userDoc = await getDoc(doc(collectionRef, currentUser.uid))
-            console.log(userDoc.data())
-            setUserData(userDoc.data())
-        }
+        
         fetchUserData()
     }, [])
 

@@ -44,7 +44,8 @@ const AddBlog = () => {
                 "title": titleRef.current.value,
                 "description": descRef.current.value,
                 "bigDescription": bigDescRef.current.value,
-                "imageUrl": cloudData.url
+                "imageUrl": cloudData.url,
+                "likes":0
             }
 
             await addDoc(data, blogdata)

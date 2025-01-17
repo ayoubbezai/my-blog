@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { Alert } from "@/components/ui/alert";
 import { useNavigate } from "react-router-dom";
@@ -18,10 +18,13 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login, setRole, currentUser } = useAuth();
   const navigate = useNavigate();
+  useEffect(() => {
+    if (currentUser) {
+      navigate("/dashboard")
+    }
+  }, [currentUser]
+  )
 
-  if (currentUser) {
-    navigate("/dashboard")
-  }
 
 
 

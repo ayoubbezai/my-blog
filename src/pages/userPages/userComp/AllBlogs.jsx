@@ -43,7 +43,7 @@ const AllBlogs = () => {
     useEffect(() => {
         getAllBlog();
         getAllUsers();
-    }, []);
+    }, [Liked]);
 
     return (
         <>
@@ -67,7 +67,7 @@ const AllBlogs = () => {
                                     onClick={() => like(blog.id)}
                                     disabled={loading}
 
-                                    className={`flex text-base items-center gap-2 text-gray-700 ${Liked.includes(blog.id) && "text-blue-600"} hover:text-primary focus:outline-none`}>
+                                    className={`flex text-base items-center gap-2  ${Liked.includes(blog.id) && "text-blue-600"} hover:text-primary focus:outline-none`}>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         className="h-6 w-6"

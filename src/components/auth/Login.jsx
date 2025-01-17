@@ -16,8 +16,14 @@ const Login = () => {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const { login, setRole } = useAuth();
+  const { login, setRole, currentUser } = useAuth();
   const navigate = useNavigate();
+
+  if (currentUser) {
+    navigate("/dashboard")
+  }
+
+
 
   async function handleSubmit(e) {
     e.preventDefault();

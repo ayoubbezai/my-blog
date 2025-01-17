@@ -12,13 +12,13 @@ const Home = () => {
             <div className="flex space-x-4 mt-6">
                 <Link
                     to="/signup"
-                    className="px-8 py-3 text-white bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform transition-all duration-300 hover:scale-105"
+                    className="px-8 py-3 text-white bg-primary rounded-lg shadow-lg  focus:outline-none focus:ring-2 focus:ring-offset-2 transform transition-all duration-300 md:hover:scale-105"
                 >
                     Signup
                 </Link>
                 <Link
                     to="/login"
-                    className="px-8 py-3 text-white bg-green-600 rounded-lg shadow-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transform transition-all duration-300 hover:scale-105"
+                    className="px-8 py-3 text-white  bg-secondary rounded-lg shadow-lg  focus:outline-none focus:ring-2  focus:ring-offset-2 transform transition-all duration-300 md:hover:scale-105"
                 >
                     Login
                 </Link>

@@ -6,7 +6,7 @@ import { getFirestore, doc, collection, updateDoc } from "firebase/firestore";
 const AllBlogs = () => {
     const { blogs, getAllBlog, currentUser, getAllUsers, users } = useAuth();
     const [loading, setLoading] = useState(false);
-    const [Liked, setLiked] = useState([]);
+    const [liked, setLiked] = useState([]);
     const [commentState, setCommentState] = useState({}); // Object to hold comments for each blog
 
     const db = getFirestore();
@@ -15,6 +15,8 @@ const AllBlogs = () => {
 
 
     const user = users.find((b) => b.id === currentUser.uid);
+
+  
 
     const comments = async (id, e) => {
         e.preventDefault();
@@ -51,7 +53,6 @@ const AllBlogs = () => {
         const likedBlogs = user.likedBlogs;
         const blog = blogs.find((b) => b.id === id);
 
-        setLiked([]);
 
         if (likedBlogs.includes(id)) {
             await updateDoc(doc(collectionRef2, currentUser.uid), {
@@ -74,7 +75,7 @@ const AllBlogs = () => {
     useEffect(() => {
         getAllBlog();
         getAllUsers();
-    }, [Liked]);
+    }, []);
 
     return (
         <>
@@ -97,7 +98,7 @@ const AllBlogs = () => {
                                 <button
                                     onClick={() => like(blog.id)}
                                     disabled={loading}
-                                    className={`flex text-base items-center gap-2 ${Liked.includes(blog.id) && "text-blue-600"
+                                    className={`flex text-base items-center gap-2 ${liked.includes(blog.id) && "text-blue-600"
                                         } hover:text-primary focus:outline-none`}
                                 >
                                     <svg
@@ -129,7 +130,7 @@ const AllBlogs = () => {
                                         blog.comments.map((b) => (
 
                                             <p className="text-sm text-gray-800 font-medium">
-                                               {b}
+                                                {b}
                                             </p>
                                         ))
                                     ) : (

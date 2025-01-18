@@ -16,7 +16,7 @@ const AllBlogs = () => {
 
     const user = users.find((b) => b.id === currentUser.uid);
 
-  
+
 
     const comments = async (id, e) => {
         e.preventDefault();
@@ -90,7 +90,7 @@ const AllBlogs = () => {
                         <h1 className="text-2xl font-bold self-center">{blog.title}</h1>
                         <img src={blog.imageUrl} alt="Blog visual" className="rounded-md" />
 
-                        <p className="text-base text-gray-800 font-medium">{blog.description}</p>
+                        <p className="text-base text-gray-800 font-medium">{blog.bigDescription.substring(0, 250)}</p>
 
                         <div className="flex justify-between items-center text-base ">
                             <div className="flex gap-3">

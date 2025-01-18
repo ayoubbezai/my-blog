@@ -21,7 +21,7 @@ const RecentBlogs = () => {
                         <h1 className="text-2xl font-bold self-center"> <span className="font-bold text-primary"></span> {blog.title}</h1>
                         <img src={blog.imageUrl} alt="" />
 
-                        <p className="text-base text-gray-800 font-medium mb-12"> <span className="font-bold text-primary"></span> {blog.description}</p>
+                        <p className="text-base text-gray-800 font-medium mb-12"> <span className="font-bold text-primary"></span> {blog.bigDescription.substring(0,250)}</p>
 
                         <Link
                             to={`/blog/${blog.id}`}

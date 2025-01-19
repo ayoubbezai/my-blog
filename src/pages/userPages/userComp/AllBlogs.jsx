@@ -70,7 +70,13 @@ const AllBlogs = () => {
     useEffect(() => {
         getAllBlog();
         getAllUsers();
-    }, []);
+
+        // Sync liked state with the user's likedBlogs
+        if (user) {
+            setLiked(user.likedBlogs || []);
+        }
+    }, [user, getAllBlog, getAllUsers]);
+
 
     return (
         <>

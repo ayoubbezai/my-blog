@@ -21,7 +21,7 @@ const Profile = () => {
         setUserData(userDoc.data())
     }
     useEffect(() => {
-        
+
         fetchUserData()
     }, [])
 
@@ -41,7 +41,7 @@ const Profile = () => {
     }
 
     return (
-        <div className="bg-gradient-to-r from-primary to-secondary min-h-screen">
+        <div className="bg-primary min-h-screen">
             {userData.role === "admin" && (
                 <NavbarAdmin hoverd={3} />
             )}

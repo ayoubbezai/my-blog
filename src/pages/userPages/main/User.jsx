@@ -4,7 +4,7 @@ import RecentBlogs from "../userComp/RecentBolgs"
 
 const User = () => {
   return (
-    <div className="bg-gradient-to-r from-primary to-secondary">
+    <div className="bg-primary to-secondary">
       <NavBar hoverd={1} />
       <Hero />
       <RecentBlogs />

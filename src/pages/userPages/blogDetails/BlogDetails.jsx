@@ -20,7 +20,7 @@ function BlogDetails() {
     }
 
     return (
-        <div className="flex  justify-center items-center min-h-screen bg-gradient-to-r from-primary to-secondary  p-4">
+        <div className="flex  justify-center items-center min-h-screen bg-primary   p-4">
             <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full text-center">
                 <img src={blog.imageUrl} alt="Blog" className="w-full rounded-md mt-2 mb-6" />
                 <h1 className="text-2xl font-bold text-gray-800 mb-6">{blog.title}</h1>

@@ -2,7 +2,7 @@ import NavBar from "../userComp/NavBar"
 import AllBlogs from "../userComp/AllBlogs"
 const Blogs = () => {
   return (
-    <div className="bg-gradient-to-r from-primary to-secondary">
+    <div className="bg-primary">
       <NavBar hoverd={2} />
       <AllBlogs />
     </div>

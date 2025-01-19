@@ -81,7 +81,7 @@ const AllBlogs = () => {
             )}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 p-12 relative">
                 {blogs.map((blog) => (
-                    <div key={blog.id} className="relative bg-white p-4 rounded-md shadow-md flex flex-col gap-4">
+                    <div key={blog.id} className="relative bg-white py-4 px-8 rounded-md shadow-md flex flex-col gap-4">
                         <h1 className="text-2xl font-bold self-center">{blog.title}</h1>
                         <img
                             src={blog.imageUrl}

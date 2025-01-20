@@ -76,7 +76,7 @@ const AllBlogs = () => {
         if (user) {
             setLiked(user.likedBlogs || []);
         }
-    }, [user, , getAllUsers]);
+    }, [user, getAllUsers]);
 
 
     return (

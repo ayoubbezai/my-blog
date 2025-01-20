@@ -69,7 +69,7 @@ const NavBar = ({ hoverd }) => {
 
       <div className={`flex md:flex-col  items-center gap-2 md:gap-3 ${menuOpen && "hidden"}`}>
 
-        {userData.profile.trim() ? <img src={userData.profile} alt="profile" className="max-w-12 max-h-12 rounded-full aspect-square" /> : <p className="text-xl font-bold text-center bg-white rounded-full w-10 h-10 flex items-center justify-center text-primary mr-4"> {abvName} </p>}
+        {userData.profile ? <img src={userData.profile} alt="profile" className="max-w-12 max-h-12 rounded-full aspect-square" /> : <p className="text-xl font-bold text-center bg-white rounded-full w-10 h-10 flex items-center justify-center text-primary mr-4"> {abvName} </p>}
 
         <div className="flex flex-col md:gap-3  items-center ">
           <p className="text-sm font-bold text-center">{userData.name}</p>

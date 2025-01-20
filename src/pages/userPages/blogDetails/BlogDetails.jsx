@@ -81,9 +81,9 @@ function BlogDetails() {
     return (
         <div className='flex flex-col md:flex-row '>
             <NavBar />
-            <div className="flex-1 flex-col  items-center  bg-primary p-4   md:w-full md:h-screen md:overflow-y-auto  ">
-                <div className=" border-2 border-white rounded-lg shadow-lg p-6 w-3/4 md:w-1/2 mx-auto">
-                    <img src={blog.imageUrl} alt="Blog" className="w-full rounded-md mt-2 mb-6" />
+            <div className="flex-1 flex-col  items-center py-12  bg-primary md:p-4   md:w-full md:h-screen md:overflow-y-auto  ">
+                <div className=" border-2 border-white md:rounded-lg shadow-lg p-6 w-full md:w-1/2 mx-auto">
+                    <img src={blog.imageUrl} alt="Blog" className="w-full rounded-md mt-2 mb-6 aspect-video" />
                     <h1 className="text-2xl font-bold text-white mb-4">{blog.title}</h1>
                     <p className="text-white text-lg mb-6">{blog.bigDescription}</p>
                     <div className="flex flex-col justify-center gap-4 ">

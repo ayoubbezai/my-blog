@@ -85,9 +85,9 @@ const AllBlogs = () => {
             ) : (
                 <h1 className="text-2xl mt-8 md:text-4xl font-bold text-center text-secondary">ALL Blogs</h1>
             )}
-            <div className="flex flex-col gap-12 px-8 py-12 md:p-12">
+            <div className="flex flex-col gap-12 md:px-8 py-12 md:p-12">
                 {blogs.map((blog) => (
-                    <div key={blog.id} className="border-2 border-gray-600 shadow-2xl rounded-lg">
+                    <div key={blog.id} className="border-2 border-gray-600 shadow-2xl md:rounded-lg">
                         <div className="flex justify-between items-center px-6 bg-gray-600">
                             <div className="flex flex-row items-center gap-2  p-2 ">
                                 {/* Profile Picture and Name */}

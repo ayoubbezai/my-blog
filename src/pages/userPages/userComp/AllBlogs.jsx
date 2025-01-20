@@ -104,7 +104,7 @@ const AllBlogs = () => {
                         </div>
                         <div className="relative bg-primary p-6 rounded-lg shadow-lg flex flex-col md:flex-row gap-16">
                             {/* Left Section - Image and Blog Content */}
-                            <div className="flex-1 flex gap-2 flex-col">
+                            <div className="flex-1 flex md:gap-2 flex-col">
                                 <h1 className="text-lg md:text-2xl font-bold text-white mb-4">{blog.title}</h1>
                                 <img
                                     src={blog.imageUrl}
@@ -171,7 +171,7 @@ const AllBlogs = () => {
                                 <form className="flex items-center gap-4" onSubmit={(e) => comments(blog.id, e)}>
                                     <textarea
                                         className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                                        rows="2"
+                                        rows="1"
                                         placeholder="Write your comment here..."
                                         value={commentState[blog.id] || ""}
                                         onChange={(e) =>

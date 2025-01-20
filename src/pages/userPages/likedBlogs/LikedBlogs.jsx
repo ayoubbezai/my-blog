@@ -16,7 +16,10 @@ const LikedBlogs = () => {
         <div className="flex flex-col md:flex-row min-h-screen bg-primary">
             <NavBar hoverd={3} />
             <div className="flex-1 p-8 md:p-16 bg-primary shadow-lg md:h-screen md:overflow-y-auto">
-                <h1 className="text-3xl font-semibold text-center text-secondary mb-8">Liked Blogs</h1>
+                <h1 className="text-3xl font-semibold text-center text-secondary mb-8">
+                    {userData?.likedBlogs.length ? "Liked Blogs" : "There are no liked blogs"}
+                </h1>
+
                 <div className="space-y-6">
                     {blogs.filter(blog => userData?.likedBlogs.includes(blog.id))
                         .map(b => (

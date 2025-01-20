@@ -94,27 +94,31 @@ const Profile = () => {
                 <NavbarAdmin hoverd={3} />
             )}
             {userData.role === "user" && (
-                <NavbarUser hoverd={3} />
+                <NavbarUser hoverd={4} />
             )}
 
-            <div className="flex justify-center w-full py-12 px-4  md:h-screen md:overflow-auto  ">
-                <div className="bg-white pt-8 rounded-xl shadow-lg w-full max-w-md">
-                    <h1 className="text-3xl font-bold text-center mb-6 text-primary">Profile</h1>
+            <div className="flex-1 justify-center items-center w-full py-12 px-4  md:h-screen md:overflow-auto  ">
+                <div className=" pt-8 w-2/3 lg:w-1/2 mx-auto ">
+                    <div className="">
 
-                    <div className="flex flex-col items-center gap-6">
-                        {userData.profile ? <img className="max-h-32 aspect-square max-w-32  rounded-full" src={userData.profile} alt="profile" /> : <p className="text-lg font-medium p-4 text-white bg-primary rounded-full px-5 "> {abvName}</p>}
-                        <p className="text-lg font-medium"> <span className="text-primary font-bold">Name:</span> {userData.name}</p>
-                        <p className="text-lg font-medium"> <span className="text-primary font-bold">Email:</span> {userData.email}</p>
-                        <p className="text-lg font-medium"> <span className="text-primary font-bold">Role:</span> {userData.role}</p>
+                        <div className="flex flex-col items-center gap-4 bg-white rounded-xl shadow-lg py-12">
+                            <h1 className="text-3xl font-bold text-center mb-6 text-primary">Profile</h1>
+                            {userData.profile ? <img className="max-h-32 aspect-square max-w-32  rounded-full" src={userData.profile} alt="profile" /> : <p className="text-lg font-medium p-4 text-white bg-primary rounded-full px-5 "> {abvName}</p>}
+                            <p className="text-lg font-medium"> <span className="text-primary font-bold">Name:</span> {userData.name}</p>
+                            <p className="text-lg font-medium"> <span className="text-primary font-bold">Email:</span> {userData.email}</p>
+                            <p className="text-lg font-medium"> <span className="text-primary font-bold">Role:</span> {userData.role}</p>
 
-                        <button
-                            onClick={handleLogout}
-                            className=" bg-secondary text-white px-6 py-2 rounded-md text-lg font-semibold mt-4 transition-all md:hover:scale-105"
-                        >
-                            Logout
-                        </button>
+                            <button
+                                onClick={handleLogout}
+                                className=" bg-secondary text-white px-6 py-2 rounded-md text-lg font-semibold mt-4 transition-all md:hover:scale-105"
+                            >
+                                Logout
+                            </button>
 
-                        <div className=" flex flex-col items-center    p-2 gap-8 justify-between  bg-white rounded-xl shadow-lg w-full my-20 pb-5 ">
+                        </div>
+
+
+                        <div className=" flex flex-col items-center mt-20    p-2 gap-6 justify-between  bg-white rounded-xl shadow-lg w-full  pb-5 ">
                             <form onSubmit={updateName} className="flex flex-col justify-between items-center gap-4 mt-12    ">
                                 <h2 className="text-xl font-bold mb-2"> <span className="text-primary text-2xl">Update Name:</span> </h2>
                                 <div className="flex justify-center items-center gap-4 w-full">

@@ -6,7 +6,7 @@ const User = () => {
   return (
     <div className="bg-primary md:flex flex-row ">
       <NavBar hoverd={1} />
-      <div className="h-screen overflow-auto">
+      <div className="h-screen flex-1 overflow-auto">
         <Hero />
         <RecentBlogs />
       </div>

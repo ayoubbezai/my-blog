@@ -1,140 +1,196 @@
-import { useParams, Link } from 'react-router-dom';
 import { useAuth } from "../../../context/AuthContext";
-import { useState, useEffect } from "react";
-import { getFirestore, updateDoc, doc } from "firebase/firestore";
-import NavBar from '../userComp/NavBar';
+import { Link } from "react-router-dom";
+import { getFirestore, doc, collection, updateDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
 
-function BlogDetails() {
-    const { getAllBlog, blogs, currentUser, getAllUsers, users } = useAuth();
+const AllBlogs = () => {
+    const { blogs, getAllBlog, currentUser, getAllUsers, users } = useAuth();
     const [loading, setLoading] = useState(false);
-    const [liked, setLiked] = useState(false);
-    const [commentState, setCommentState] = useState("");
+    const [liked, setLiked] = useState([]);
+    const [commentState, setCommentState] = useState({}); // Object to hold comments for each blog
 
     const db = getFirestore();
-    const { id } = useParams();
-    const blog = blogs.find((b) => b.id.toString() === id);
+    const collectionRef = collection(db, "blogs");
+    const collectionRef2 = collection(db, "users");
 
     const user = users.find((b) => b.id === currentUser.uid);
 
-    useEffect(() => {
-        getAllBlog();
-        getAllUsers();
-        if (user && blog) {
-            setLiked(user.likedBlogs?.includes(blog.id));
-        }
-    }, [user, blog, getAllBlog, getAllUsers]);
-
-    const like = async () => {
-        setLoading(true);
-        const likedBlogs = user.likedBlogs || [];
-
-        try {
-            if (liked) {
-                await updateDoc(doc(db, "users", currentUser.uid), {
-                    likedBlogs: likedBlogs.filter((b) => b !== blog.id),
-                });
-                await updateDoc(doc(db, "blogs", blog.id), { likes: blog.likes - 1 });
-            } else {
-                await updateDoc(doc(db, "users", currentUser.uid), {
-                    likedBlogs: [...likedBlogs, blog.id],
-                });
-                await updateDoc(doc(db, "blogs", blog.id), { likes: blog.likes + 1 });
-            }
-            setLiked(!liked);
-        } catch (error) {
-            console.log("Error updating likes:", error);
-        }
-        setLoading(false);
-        getAllUsers();
-        getAllBlog();
-    };
-
-    const addComment = async (e) => {
+    const comments = async (id, e) => {
         e.preventDefault();
         setLoading(true);
 
-        if (!commentState.trim()) {
+        const blog = blogs.find((b) => b.id === id);
+        const prevComments = blog.comments || [];  // Ensure it's an array
+        const newComment = user.name + " :  " + commentState[id] || ""; // Get the comment from state for the specific blog
+
+        if (!newComment.trim()) {
             setLoading(false);
             return;
         }
 
         try {
-            const prevComments = blog.comments || [];
-            const newComment = `${user.name}: ${commentState}`;
-
-            await updateDoc(doc(db, "blogs", blog.id), {
+            await updateDoc(doc(collectionRef, id), {
                 comments: [...prevComments, newComment],
             });
-            setCommentState("");
+
+            getAllBlog(); // Refresh blogs after comment update
         } catch (error) {
-            console.log("Error adding comment:", error);
+            console.log("Error updating comments:", error);
         }
 
         setLoading(false);
-        getAllBlog();
+        getAllUsers();
+
+        setCommentState(prevState => ({ ...prevState, [id]: "" })); // Clear the comment input for the specific blog
     };
 
-    if (!blog) {
-        return <h2 className="text-center text-secondary text-xl">Blog not found</h2>;
-    }
+    const like = async (id) => {
+        setLoading(true);
+        const likedBlogs = user.likedBlogs;
+        const blog = blogs.find((b) => b.id === id);
+
+        if (likedBlogs.includes(id)) {
+            await updateDoc(doc(collectionRef2, currentUser.uid), {
+                likedBlogs: likedBlogs.filter((b) => b !== id),
+            });
+            setLiked(likedBlogs.filter((b) => b !== id));
+            await updateDoc(doc(collectionRef, id), { likes: blog.likes - 1 });
+        } else {
+            await updateDoc(doc(collectionRef2, currentUser.uid), {
+                likedBlogs: [...likedBlogs, id],
+            });
+            setLiked([...likedBlogs, id]);
+            await updateDoc(doc(collectionRef, id), { likes: blog.likes + 1 });
+        }
+        getAllUsers();
+        getAllBlog();
+        setLoading(false);
+    };
+
+
+    useEffect(() => {
+        getAllBlog();
+        getAllUsers();
+
+        // Sync liked state with the user's likedBlogs
+        if (user) {
+            setLiked(user.likedBlogs || []);
+        }
+    }, [user, , getAllUsers]);
+
 
     return (
-        <div className='flex flex-col md:flex-row '>
-            <NavBar />
-            <div className="flex flex-col items-center bg-primary p-4 md:w-full md:h-screen md:overflow-y-auto">
-                <div className="border-2 border-white rounded-lg shadow-lg p-6 max-w-lg w-full">
-                    <img src={blog.imageUrl} alt="Blog" className="w-full rounded-md mt-2 mb-6" />
-                    <h1 className="text-2xl font-bold text-white mb-4">{blog.title}</h1>
-                    <p className="text-white text-lg mb-6">{blog.bigDescription}</p>
-                    <div className="flex justify-between items-center mb-4">
-                        <p className="text-white">{blog.likes} Likes</p>
-                        <button
-                            onClick={like}
-                            disabled={loading}
-                            className={`px-4 py-2 rounded-md text-white font-semibold ${liked ? 'text-[#159cdf]' : 'text-white'} hover:scale-105 transition-all`}
-                        >
-                            {liked ? "Unlike" : "Like"}
-                        </button>
+        <div className="md:flex-1 md:flex-col md:h-screen md:overflow-auto ">
+            {blogs.length === 0 ? (
+                <h1 className="text-2xl font-bold self-center text-white">No blogs found</h1>
+            ) : (
+                <h1 className="text-2xl mt-8 md:text-4xl font-bold text-center text-secondary">ALL Blogs</h1>
+            )}
+            <div className="flex flex-col gap-12 px-8 py-12 md:p-12">
+                {blogs.map((blog) => (
+                    <div key={blog.id} className="relative bg-primary p-6 rounded-lg shadow-lg flex flex-col md:flex-row gap-16">
+                        {/* Left Section - Image and Blog Content */}
+                        <div className="flex-1 flex gap-2 flex-col">
+                            <h1 className="text-2xl font-bold text-white mb-4">{blog.title}</h1>
+                            <img
+                                src={blog.imageUrl}
+                                alt="Blog visual"
+                                className="rounded-md w-full h-64 object-cover"
+                            />
+                            <p className="text-base text-white font-medium mt-4">
+                                {blog.bigDescription.substring(0, 250)}...
+                            </p>
+                            <Link
+                                className="mt-4 font-semibold text-lg text-secondary hover:underline"
+                                to={`/blog/${blog.id}`}
+                            >
+                                Read More
+                            </Link>
+                        </div>
+
+                        {/* Right Section - Actions (Like, Comments, etc.) */}
+                        <div className="flex flex-col justify-center gap-4 md:w-1/3">
+                            {/* Like Button */}
+                            <div className="flex items-center justify-between text-white">
+                                <p>{blog.likes} Likes</p>
+                                <button
+                                    onClick={() => like(blog.id)}
+                                    disabled={loading}
+                                    className={`flex items-center gap-2 ${liked.includes(blog.id) ? "text-[#159cdf]" : "text-white"} 
+                                        hover:text-blue-500 focus:outline-none transition-colors duration-300`}
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-6 w-6"
+                                        fill={`${liked.includes(blog.id) ? "#159cdf" : "none"}`}
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                    >
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                    </svg>
+                                    <span className="font-semibold">Like</span>
+                                </button>
+                            </div>
+
+                            {/* Comment Count */}
+                            <div className="text-white">
+                                Comments: <span className="font-semibold">{blog.comments ? blog.comments.length : 0}</span>
+                            </div>
+
+                            {/* Comment Section */}
+                            <div className="bg-gray-800 p-4 rounded-md shadow-inner max-h-40 overflow-y-auto mb-4">
+                                <div className="space-y-2">
+                                    {blog.comments && blog.comments.length > 0 ? (
+                                        blog.comments.map((comment, index) => (
+                                            <p key={index} className="text-sm text-white font-medium">
+                                                {comment}
+                                            </p>
+                                        ))
+                                    ) : (
+                                        <p className="text-sm text-gray-500 italic">No comments yet. Be the first to comment!</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Text Area for New Comment */}
+                            <form className="flex items-center gap-4" onSubmit={(e) => comments(blog.id, e)}>
+                                <textarea
+                                    className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                                    rows="2"
+                                    placeholder="Write your comment here..."
+                                    value={commentState[blog.id] || ""}
+                                    onChange={(e) =>
+                                        setCommentState((prevState) => ({
+                                            ...prevState,
+                                            [blog.id]: e.target.value,
+                                        }))
+                                    }
+                                    required
+                                ></textarea>
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none transition-colors duration-300"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-5 w-5"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                    >
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
                     </div>
-
-                    <div className="bg-gray-800 p-4 rounded-md mb-4 max-h-40 overflow-y-auto">
-                        <h3 className="font-bold text-white mb-2">Comments:</h3>
-                        {blog.comments && blog.comments.length > 0 ? (
-                            blog.comments.map((comment, index) => (
-                                <p key={index} className="text-sm text-white mb-1">{comment}</p>
-                            ))
-                        ) : (
-                            <p className="text-sm text-gray-300">No comments yet. Be the first to comment!</p>
-                        )}
-                    </div>
-
-                    <form onSubmit={addComment} className="flex flex-col gap-4">
-                        <textarea
-                            className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                            rows="2"
-                            placeholder="Write your comment here..."
-                            value={commentState}
-                            onChange={(e) => setCommentState(e.target.value)}
-                        ></textarea>
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="bg-blue-500 text-white px-6 py-3 rounded-md font-semibold hover:scale-105 transition-all"
-                        >
-                            Add Comment
-                        </button>
-                    </form>
-
-                    <Link
-                        className="block mt-6 text-center bg-black text-white px-6 py-3 rounded-md font-semibold hover:scale-105 transition-all"
-                        to="/blogs"
-                    >
-                        Back To Blogs
-                    </Link>
-                </div>
+                ))}
             </div>
         </div>
     );
-}
+};
 
-export default BlogDetails;
+export default AllBlogs;

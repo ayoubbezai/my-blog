@@ -51,8 +51,15 @@ const NavBar = ({ hoverd }) => {
             All Blogs
           </Link>
           <Link
-            to="/profile"
+            to="/likedblogs"
             className={`text-base font-bold text-center hover:text-secondary ${hoverd === 3 ? "text-secondary" : ""
+              }`}
+          >
+            Liked Blogs
+          </Link>
+          <Link
+            to="/profile"
+            className={`text-base font-bold text-center hover:text-secondary ${hoverd === 4 ? "text-secondary" : ""
               }`}
           >
             Profile
@@ -86,21 +93,28 @@ const NavBar = ({ hoverd }) => {
       {menuOpen && < div className="flex justify-between items-center w-full " >
         <Link
           to="/dashboard"
-          className={`text-base font-bold text-center hover:text-secondary ${hoverd === 1 ? "text-secondary" : ""
+          className={`text-sm font-bold text-center hover:text-secondary ${hoverd === 1 ? "text-secondary" : ""
             }`}
         >
           Dashboard
         </Link>
         <Link
-          to="/blogsedit"
-          className={`text-base font-bold text-center hover:text-secondary ${hoverd === 2 ? "text-secondary" : ""
+          to="/blogs"
+          className={`text-sm font-bold text-center hover:text-secondary ${hoverd === 2 ? "text-secondary" : ""
             }`}
         >
-          Blogs Edit
+          All Blogs
+        </Link>
+        <Link
+          to="/likedblogs"
+          className={`text-sm font-bold text-center hover:text-secondary ${hoverd === 3 ? "text-secondary" : ""
+            }`}
+        >
+          Liked Blogs
         </Link>
         <Link
           to="/profile"
-          className={`text-base font-bold text-center hover:text-secondary ${hoverd === 3 ? "text-secondary" : ""
+          className={`text-sm font-bold text-center hover:text-secondary ${hoverd === 4 ? "text-secondary" : ""
             }`}
         >
           Profile

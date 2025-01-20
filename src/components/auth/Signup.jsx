@@ -8,6 +8,7 @@ import { Alert } from "@/components/ui/alert";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../config/firebase";
 import { doc, setDoc } from "firebase/firestore";
+import LikedBlogs from "@/pages/userPages/likedBlogs/LikedBlogs";
 
 const Signup = () => {
     const nameRef = useRef("");
@@ -42,7 +43,10 @@ const Signup = () => {
             await setDoc(userRef, {
                 name,
                 email,
-                role: "user"
+                role: "user",
+                likedBlogs:[],
+                profile:""
+
             });
             navigate("/dashboard");
         } catch (error) {

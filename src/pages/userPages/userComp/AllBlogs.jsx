@@ -102,9 +102,9 @@ const AllBlogs = () => {
                             {/* Created Date */}
                             <p className="text-gray-200 text-sm md:text-base font-semibold">{blog.createdAt}</p>
                         </div>
-                        <div className="relative bg-primary p-6 rounded-lg shadow-lg flex flex-col md:flex-row gap-16">
+                        <div className="relative bg-primary p-6 rounded-lg shadow-lg flex flex-col md:flex-row gap-8 md:gap-16">
                             {/* Left Section - Image and Blog Content */}
-                            <div className="flex-1 flex md:gap-2 flex-col">
+                            <div className="flex-1 flex md:gap-2  flex-col">
                                 <h1 className="text-lg md:text-2xl font-bold text-white mb-4">{blog.title}</h1>
                                 <img
                                     src={blog.imageUrl}

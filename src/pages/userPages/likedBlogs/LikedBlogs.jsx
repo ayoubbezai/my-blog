@@ -28,7 +28,7 @@ const LikedBlogs = () => {
                                 <img
                                     src={b.imageUrl}
                                     alt={b.title}
-                                    className="w-full h-64 object-cover rounded-md mb-4" // Reverted width and height to original
+                                    className="w-full h-64 object-cover rounded-md mb-4 aspect-video" // Reverted width and height to original
                                 />
                                 <h3 className="text-xl font-semibold text-white">{b.title}</h3>
                                 <p className="text-base text-white mt-2">{b.bigDescription.substring(0, 250)}...</p>

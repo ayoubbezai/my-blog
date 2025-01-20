@@ -81,9 +81,9 @@ const AllBlogs = () => {
     return (
         <div className="md:flex-1 md:flex-col md:h-screen md:overflow-auto">
             {blogs.length === 0 ? (
-                <h1 className="text-2xl font-bold self-center text-white">No blogs found</h1>
+                <h1 className="text-lg md:text-2xl font-bold self-center text-white">No blogs found</h1>
             ) : (
-                <h1 className="text-2xl mt-8 md:text-4xl font-bold text-center text-secondary">ALL Blogs</h1>
+                <h1 className="text-lg   mt-8 md:text-4xl font-bold text-center text-secondary">ALL Blogs</h1>
             )}
             <div className="flex flex-col gap-12 md:px-8 py-12 md:p-12">
                 {blogs.map((blog) => (
@@ -96,26 +96,26 @@ const AllBlogs = () => {
                                     alt="photo"
                                     className="w-10 h-10 rounded-full border-2 border-gray-300"
                                 />
-                                <p className="text-gray-100 text-base font-semibold">{blog.createdBy?.name || 'Unknown User'}</p>
+                                <p className="text-gray-100 text-sm md:text-base font-semibold">{blog.createdBy?.name || 'Unknown User'}</p>
                             </div>
 
                             {/* Created Date */}
-                            <p className="text-gray-200 text-base font-semibold">{blog.createdAt}</p>
+                            <p className="text-gray-200 text-sm md:text-base font-semibold">{blog.createdAt}</p>
                         </div>
                         <div className="relative bg-primary p-6 rounded-lg shadow-lg flex flex-col md:flex-row gap-16">
                             {/* Left Section - Image and Blog Content */}
                             <div className="flex-1 flex gap-2 flex-col">
-                                <h1 className="text-2xl font-bold text-white mb-4">{blog.title}</h1>
+                                <h1 className="text-lg md:text-2xl font-bold text-white mb-4">{blog.title}</h1>
                                 <img
                                     src={blog.imageUrl}
                                     alt="Blog visual"
                                     className="rounded-md w-full h-64 object-cover"
                                 />
-                                <p className="text-base text-white font-medium mt-4">
+                                <p className="text-sm md:text-base text-white font-medium mt-4">
                                     {blog.bigDescription.substring(0, 250)}...
                                 </p>
                                 <Link
-                                    className="mt-4 font-semibold text-lg text-secondary hover:underline"
+                                    className="mt-4 font-semibold text-base md:text-lg text-secondary hover:underline"
                                     to={`/blog/${blog.id}`}
                                 >
                                     Read More

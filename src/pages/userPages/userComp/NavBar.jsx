@@ -27,7 +27,7 @@ const NavBar = ({ hoverd }) => {
 
 
   return (
-    <div className="flex  md:flex-col bg-black text-white justify-between  items-center p-4  px-20 ">
+    <div className="flex  md:flex-col bg-black text-white justify-between  items-center p-4  md:px-20 ">
       <div className={`flex items-center gap-2 ${menuOpen && "hidden"}`}>
         <h1 className="text-2xl font-bold text-secondary tracking-widest uppercase">BLOG</h1>
       </div>

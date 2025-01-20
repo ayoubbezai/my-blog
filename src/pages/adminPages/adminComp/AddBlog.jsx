@@ -8,10 +8,9 @@ import toast, { Toaster } from 'react-hot-toast';
 const AddBlog = () => {
 
     const titleRef = useRef("")
-    const descRef = useRef("")
     const bigDescRef = useRef("")
     const [loading, setLoading] = useState(false)
-    const { getAllBlog } = useAuth()
+    const { getAllBlog, fetchUserData, userData } = useAuth()
     const [image, setImage] = useState(null);
     const [url, setUrl] = useState('');
 
@@ -39,23 +38,28 @@ const AddBlog = () => {
             const cloudData = await res.json();
             setUrl(cloudData.url);
             console.log(cloudData.url);
+            const currentDate = new Date();
+            const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`;
+            fetchUserData()
 
             const blogdata = {
                 "title": titleRef.current.value,
-                "description": descRef.current.value,
                 "bigDescription": bigDescRef.current.value,
                 "imageUrl": cloudData.url,
-                "likes": 0
+                "likes": 0,
+                "createdAt": formattedDate,
+                "createdBy": {
+                    "name": userData.name,
+                    "photo": userData.profile,
+                },
             }
 
             await addDoc(data, blogdata)
             titleRef.current.value = ""
-            descRef.current.value = ""
             bigDescRef.current.value = ""
             setUrl("")
             setImage("")
             toast.success("blog Upload Successfully")
-
             getAllBlog()
 
         } catch (error) {
@@ -77,7 +81,6 @@ const AddBlog = () => {
             <h1 className="text-4xl font-bold text-center text-secondary">Add Blog</h1>
             <form className="flex flex-col gap-4  p-4 rounded-md w-1/2" onSubmit={handleSubmit}>
                 <input type="text" placeholder="Title" className="w-full p-2 rounded-md border-2 " ref={titleRef} required />
-                <input type="text" placeholder="Description" className="w-full p-2 rounded-md border-2 " ref={descRef} required />
                 <textarea type="text" placeholder="big description" className="w-full p-2 rounded-md border-2   " ref={bigDescRef} required />
 
                 <div className="input flex justify-center mb-5">

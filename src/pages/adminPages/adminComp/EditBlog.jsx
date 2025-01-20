@@ -33,8 +33,8 @@ const EditBlog = () => {
 
                         <h1 className="text-2xl  font-semibold self-center"> <span className="font-bold text-primary">Title:</span> {blog.title}</h1>
                         <img src={blog.imageUrl} alt="" />
-                        <p className="text-base text-gray-800  font-medium"> <p className="font-bold text-black text-center text-lg my-4">Description:</p> {blog.description}</p>
-                        <p className="text-base text-gray-800 font-medium mb-16"> <p className="font-bold text-black text-center text-lg my-4 ">Total Description:</p> {blog.bigDescription}</p>
+                        
+                        <p className="text-base text-gray-800 font-medium mb-16"> <p className="font-bold text-black text-center text-lg my-4 "> Description:</p> {blog.bigDescription}</p>
 
                         <button className=" absolute  bottom-3 w-1/2 mx-auto text-center right-0 left-0 bg-red-500 text-white p-2 rounded-md" onClick={() => remove(blog.id)}>Delete</button>
                         <Toaster />

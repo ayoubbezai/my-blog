@@ -14,16 +14,22 @@ export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState(null)
     const [loading, setLoading] = useState(true)
     const [role, setRole] = useState(null)
-    const [name, setName] = useState("")
     const [abvName, setAbvName] = useState("")
+    const [userData, setUserData] = useState({ name: "", email: "", role: "", profile: "" })
+
     const [blogs, setBlogs] = useState([])
-    const getabvName = () => {
-        setAbvName(name.split(" ").map(word => word[0]).join("").slice(0, 2).toUpperCase())
+ 
+
+    const fetchUserData = async () => {
+        const userRef = doc(db, "users", currentUser.uid)
+        const userDoc = await getDoc(userRef)
+        setUserData(userDoc.data())
+        setAbvName(userDoc.data().name.split(" ").map(word => word[0]).join("").slice(0, 2).toUpperCase())
     }
 
-    useEffect(() => {
-        getabvName()
-    }, [name])
+    const getabvName = (name) => {
+        setAbvName(name.split(" ").map(word => word[0]).join("").slice(0, 2).toUpperCase())
+    }
 
 
 
@@ -50,11 +56,7 @@ export function AuthProvider({ children }) {
 
     const db = getFirestore()
 
-    async function getName() {
-        const userRef = doc(db, "users", currentUser.uid)
-        const userData = await getDoc(userRef)
-        setName(userData.data().name)
-    }
+  
 
 
     const getAllBlog = async () => {
@@ -82,10 +84,10 @@ export function AuthProvider({ children }) {
         setRole,
         role,
         logout,
-        name,
         abvName,
+        fetchUserData,
+        userData, 
         getabvName,
-        getName,
         blogs,
         getAllBlog,
         users,

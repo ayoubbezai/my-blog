@@ -4,10 +4,12 @@ import RecentBlogs from "../userComp/RecentBolgs"
 
 const User = () => {
   return (
-    <div className="bg-primary to-secondary">
+    <div className="bg-primary md:flex flex-row ">
       <NavBar hoverd={1} />
-      <Hero />
-      <RecentBlogs />
+      <div className="h-screen overflow-auto">
+        <Hero />
+        <RecentBlogs />
+      </div>
     </div>
   )
 }

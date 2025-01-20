@@ -45,7 +45,7 @@ const AddBlog = () => {
                 "description": descRef.current.value,
                 "bigDescription": bigDescRef.current.value,
                 "imageUrl": cloudData.url,
-                "likes":0
+                "likes": 0
             }
 
             await addDoc(data, blogdata)
@@ -98,7 +98,7 @@ const AddBlog = () => {
                     </label>
                     <input
                         id="file-upload"
-                        className=' text-white'
+                        className=' text-white hidden'
                         type="file"
                         onChange={(e) => setImage(e.target.files[0])} />
                 </div>

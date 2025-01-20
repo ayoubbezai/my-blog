@@ -3,12 +3,16 @@ import { useAuth } from "../../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
+
+
+
 const NavBar = ({ hoverd }) => {
-    const { logout, getName, name, abvName, getabvName } = useAuth();
+    const { logout, userData, fetchUserData ,abvName} = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
+ 
+
     useEffect(() => {
-        getName();
-        getabvName();
+        fetchUserData()
     }, []);
 
     const navigate = useNavigate();
@@ -17,6 +21,10 @@ const NavBar = ({ hoverd }) => {
         await logout();
         navigate("/login");
     };
+
+ 
+
+
 
     return (
         <div className="flex  md:flex-row bg-primary/90 text-white justify-between  items-center p-4 px-12">
@@ -53,11 +61,11 @@ const NavBar = ({ hoverd }) => {
             </div>
 
             <div className={`flex items-center gap-2 flex-row ${menuOpen && "hidden"}`}>
-                <p className="text-xl font-bold text-center bg-white rounded-full w-10 h-10 flex items-center justify-center text-primary mr-4">
-                    {abvName}
-                </p>
+
+                {userData.profile.trim() ? <img src={userData.profile} alt="profile" className="max-w-12 max-h-12 rounded-full aspect-square" /> : <p className="text-xl font-bold text-center bg-white rounded-full w-10 h-10 flex items-center justify-center text-primary mr-4"> {abvName} </p>}
+
                 <div className="flex flex-col">
-                    <p className="text-sm font-bold text-center">{name}</p>
+                    <p className="text-sm font-bold text-center">{userData.name}</p>
                     <button
                         onClick={handleLogout}
                         className="text-sm font-bold text-center text-secondary hover:underline"

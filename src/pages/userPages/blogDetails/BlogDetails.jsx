@@ -112,7 +112,7 @@ const BlogDetails = () => {
     return (
         <div className="flex flex-col md:flex-row min-h-screen bg-primary">
             <NavBar />
-            <div className="flex-1 p-8 md:p-16 bg-primary shadow-lg md:h-screen md:overflow-y-auto">
+            <div className="flex-1  md:p-16 bg-primary shadow-lg md:h-screen md:overflow-y-auto">
                 <div className="max-w-4xl mx-auto bg-gray-800 rounded-lg shadow-lg p-6">
                     <div className="flex items-center gap-4 mb-6">
                         <img

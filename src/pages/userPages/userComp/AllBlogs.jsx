@@ -43,7 +43,9 @@ const AllBlogs = () => {
                 id: doc.id,
                 ...doc.data(),
             }));
+
             const lastVisibleDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
+
             return { data, lastVisibleDoc };
         } catch (error) {
             console.error("Error fetching limited data:", error);
@@ -53,13 +55,23 @@ const AllBlogs = () => {
     // Function to fetch more blogs
     const fetchMoreBlogs = async () => {
         setBlogLoading(true);
+
         const { data, lastVisibleDoc } = await fetchLimitData("blogs", 3, memoizedLastVisible);
-        setBlogsLoaded(prevBlog => prevBlog + 3);
-        if (blogsLoaded >= totalBlogs) {
-            setHasMore(false);
-        }
+
         setLimitBlogs(prevBlogs => [...prevBlogs, ...data]);
+
+        const blogNumber = data.length + limitBlogs.length;
+
+        setBlogsLoaded(blogNumber);
+
+        if (blogNumber >= totalBlogs) {
+            setHasMore(false)
+        } else {
+            setHasMore(true)
+        }
+
         setLastVisible(lastVisibleDoc);
+
         setBlogLoading(false);
     };
 
@@ -159,8 +171,8 @@ const AllBlogs = () => {
             const { data, lastVisibleDoc } = await fetchLimitData("blogs", 3);
             setLimitBlogs(data);
             setLastVisible(lastVisibleDoc);
+            setHasMore(true)
         };
-
         fetchData();
     }, [currentUser.uid]);
 
@@ -168,7 +180,8 @@ const AllBlogs = () => {
         if (user) {
             setLiked(user.likedBlogs || []);
         }
-    }, [user]);
+
+    }, [user, blogsLoaded, totalBlogs]);
 
     return (
         <div className="md:flex-1 md:flex-col md:h-screen md:overflow-auto">
@@ -204,8 +217,8 @@ const AllBlogs = () => {
                                 </p>
                                 <div className="pt-4 my-3">
                                     {blog.tags && blog.tags.map((b, index) => (
-                                        <div key={index} className="inline-block mx-2 p-[2px] rounded-lg bg-gradient-to-r from-pink-500 to-purple-500">
-                                            <span className="block px-3 py-1 text-white font-semibold rounded-lg bg-gray-800">{b}</span>
+                                        <div key={index} className="inline-block m-2 p-[2px] rounded-lg bg-gradient-to-r from-pink-500 to-purple-500">
+                                            <span className="block px-3  py-1 text-white font-semibold rounded-lg bg-gray-800">{b}</span>
                                         </div>
                                     ))}
                                 </div>

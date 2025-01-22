@@ -15,10 +15,10 @@ export function AuthProvider({ children }) {
     const [loading, setLoading] = useState(true)
     const [role, setRole] = useState(null)
     const [abvName, setAbvName] = useState("")
-    const [userData, setUserData] = useState({ name: "", email: "", role: "", profile: "" })
+    const [userData, setUserData] = useState({})
 
     const [blogs, setBlogs] = useState([])
- 
+
 
     const fetchUserData = async () => {
         const userRef = doc(db, "users", currentUser.uid)
@@ -56,7 +56,7 @@ export function AuthProvider({ children }) {
 
     const db = getFirestore()
 
-  
+
 
 
     const getAllBlog = async () => {
@@ -86,7 +86,7 @@ export function AuthProvider({ children }) {
         logout,
         abvName,
         fetchUserData,
-        userData, 
+        userData,
         getabvName,
         blogs,
         getAllBlog,

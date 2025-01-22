@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getFirestore, doc, collection, getDocs, query, limit } from "firebase/firestore";
+import { getFirestore, collection, getDocs, query, limit } from "firebase/firestore";
 
 const db = getFirestore();
 

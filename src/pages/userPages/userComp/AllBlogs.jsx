@@ -125,9 +125,13 @@ const AllBlogs = () => {
         setLoading(true);
         const blog = memoizedBlogs.find((b) => b.id === id);
         const prevComments = blog.comments || [];
-        const newComment = user.name + " :  " + commentState[id] || "";
+        const newComment = {
+            "name": user.name,
+            "content": commentState[id],
+            "picture": user.profile,
+        }
 
-        if (!newComment.trim()) {
+        if (!newComment.content.trim()) {
             setLoading(false);
             return;
         }
@@ -198,7 +202,7 @@ const AllBlogs = () => {
                                 <p className="text-sm md:text-base text-white font-medium mt-4">
                                     {blog.bigDescription.substring(0, 250)}...
                                 </p>
-                                <div className="pt-4">
+                                <div className="pt-4 my-3">
                                     {blog.tags && blog.tags.map((b, index) => (
                                         <div key={index} className="inline-block mx-2 p-[2px] rounded-lg bg-gradient-to-r from-pink-500 to-purple-500">
                                             <span className="block px-3 py-1 text-white font-semibold rounded-lg bg-gray-800">{b}</span>
@@ -229,13 +233,26 @@ const AllBlogs = () => {
                                 </div>
                                 <div className="text-white">Comments: <span className="font-semibold">{blog.comments ? blog.comments.length : 0}</span></div>
                                 <div className="bg-gray-800 p-4 rounded-md shadow-inner max-h-40 overflow-y-auto mb-4">
-                                    <div className="space-y-2">
-                                        {blog.comments && blog.comments.length > 0 ? blog.comments.map((comment, index) => (
-                                            <p key={index} className="text-sm text-white font-medium">{comment}</p>
-                                        )) : (
-                                            <p className="text-sm text-gray-500 italic">No comments yet. Be the first to comment!</p>
-                                        )}
-                                    </div>
+                                    {blog.comments && blog.comments.length > 0 ? (
+                                        blog.comments.map((comment, index) => (
+                                            <div key={index} className="flex items-start gap-4 p-3 bg-gray-700 rounded-lg mb-3 shadow-sm">
+                                                <img
+                                                    src={comment.picture || anonymous}
+                                                    alt="profile"
+                                                    className="w-10 h-10 rounded-full border-2 border-blue-500"
+                                                />
+                                                <div>
+                                                    <p className="text-sm text-gray-300 font-semibold">{comment.name}</p>
+                                                    <p className="text-sm text-gray-400 mt-1">{comment.content}</p>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p className="text-sm text-gray-500 italic text-center">
+                                            No comments yet. Be the first to comment!
+                                        </p>
+                                    )}
+
                                 </div>
                                 <form className="flex items-center gap-4" onSubmit={(e) => comments(blog.id, e)}>
                                     <textarea

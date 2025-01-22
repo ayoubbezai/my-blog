@@ -12,11 +12,16 @@ const LikedBlogs = () => {
 
     useEffect(() => {
         fetchUserData();
-        const getBlog = async () => {
-            const likedBlogs = await fetchBlogsByIds(likedBlogsId)
-            setLikedBlogs(likedBlogs)
+        try {
+            const getBlog = async () => {
+                const likedBlogs = await fetchBlogsByIds(likedBlogsId)
+                setLikedBlogs(likedBlogs)
+            }
+            getBlog()
+
+        } catch {
+            console.log("error")
         }
-        getBlog()
     }, [fetchUserData, likedBlogsId]);
 
     console.log(memorizedBlogs)
@@ -44,7 +49,7 @@ const LikedBlogs = () => {
             <NavBar hoverd={3} />
             <div className="flex-1 p-8 md:p-16 bg-primary shadow-lg md:h-screen md:overflow-y-auto">
                 <h1 className="text-3xl font-semibold text-center text-secondary mb-8">
-                    {memorizedBlogs.length ? "Liked Blogs" : "There are no liked blogs"}
+                    {memorizedBlogs ? "Liked Blogs" : "There are no liked blogs"}
                 </h1>
 
                 <div className=" grid grid-cols-1 md:grid-cols-2  2xl:grid-cols-3 gap-y-8">

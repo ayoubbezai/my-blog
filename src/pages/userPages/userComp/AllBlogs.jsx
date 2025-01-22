@@ -258,7 +258,7 @@ const AllBlogs = () => {
                                     <textarea
                                         className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                                         rows="1"
-                                        placeholder="Write your comment here..."
+                                        placeholder="Write your comment..."
                                         value={commentState[blog.id] || ""}
                                         onChange={(e) =>
                                             setCommentState((prevState) => ({

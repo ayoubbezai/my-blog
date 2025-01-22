@@ -1,54 +1,105 @@
 import { useAuth } from "../../../context/AuthContext";
 import { Link } from "react-router-dom";
-import { getFirestore, doc, collection, updateDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
-import anonymous from "../../../assets/anonymous.png"
+import { getFirestore, doc, collection, updateDoc, query, limit, startAfter, getDocs, getDoc } from "firebase/firestore";
+import { useEffect, useState, useMemo } from "react";
+import anonymous from "../../../assets/anonymous.png";
+import { motion } from 'framer-motion';
 
 const AllBlogs = () => {
-    const { blogs, getAllBlog, currentUser, getAllUsers, users } = useAuth();
+    const { currentUser } = useAuth();
     const [loading, setLoading] = useState(false);
+    const [blogLoading, setBlogLoading] = useState(false);
+    const [user, setUser] = useState({});
+    const [totalBlogs, setTotalBlogs] = useState(false);
+    const [blogsLoaded, setBlogsLoaded] = useState(3);
+    const [lastVisible, setLastVisible] = useState(null);
     const [liked, setLiked] = useState([]);
-    const [commentState, setCommentState] = useState({}); // Object to hold comments for each blog
+    const [commentState, setCommentState] = useState({});
+    const [limitBlogs, setLimitBlogs] = useState([]);
+    const [hasMore, setHasMore] = useState(true);
+    const memoizedBlogs = useMemo(() => limitBlogs, [limitBlogs]);
+    const memoizedLastVisible = useMemo(() => lastVisible, [lastVisible]);
 
     const db = getFirestore();
     const collectionRef = collection(db, "blogs");
     const collectionRef2 = collection(db, "users");
 
-    const user = users.find((b) => b.id === currentUser.uid);
-
-    const comments = async (id, e) => {
-        e.preventDefault();
-        setLoading(true);
-
-        const blog = blogs.find((b) => b.id === id);
-        const prevComments = blog.comments || [];  // Ensure it's an array
-        const newComment = user.name + " :  " + commentState[id] || ""; // Get the comment from state for the specific blog
-
-        if (!newComment.trim()) {
-            setLoading(false);
-            return;
-        }
-
-        try {
-            await updateDoc(doc(collectionRef, id), {
-                comments: [...prevComments, newComment],
-            });
-
-            getAllBlog(); // Refresh blogs after comment update
-        } catch (error) {
-            console.log("Error updating comments:", error);
-        }
-
-        setLoading(false);
-        getAllUsers();
-
-        setCommentState(prevState => ({ ...prevState, [id]: "" })); // Clear the comment input for the specific blog
+    // Function to fetch the total blog count
+    const fetchTotalBlogsCount = async () => {
+        const snapshot = await getDocs(collectionRef);
+        return snapshot.size;
     };
 
+    // Function to fetch limited data from a collection
+    const fetchLimitData = async (collectionName, limitCount, startDoc = null) => {
+        try {
+            const collectionRef3 = collection(db, collectionName);
+            let q = query(collectionRef3, limit(limitCount));
+            if (startDoc) {
+                q = query(q, startAfter(startDoc));
+            }
+            const querySnapshot = await getDocs(q);
+            const data = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+            const lastVisibleDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
+            return { data, lastVisibleDoc };
+        } catch (error) {
+            console.error("Error fetching limited data:", error);
+        }
+    };
+
+    // Function to fetch more blogs
+    const fetchMoreBlogs = async () => {
+        setBlogLoading(true);
+        const { data, lastVisibleDoc } = await fetchLimitData("blogs", 3, memoizedLastVisible);
+        setBlogsLoaded(prevBlog => prevBlog + 3);
+        if (blogsLoaded >= totalBlogs) {
+            setHasMore(false);
+        }
+        setLimitBlogs(prevBlogs => [...prevBlogs, ...data]);
+        setLastVisible(lastVisibleDoc);
+        setBlogLoading(false);
+    };
+
+    // Function to fetch user data
+    const fetchUser = async (id) => {
+        try {
+            const userRef = doc(db, "users", id);
+            const userData = await getDoc(userRef);
+            setUser(userData.data());
+        } catch {
+            console.log("error");
+        }
+    };
+
+    // Function to fetch a specific blog data
+    const fetchoneBlog = async (id) => {
+        try {
+            const blogRef = doc(db, "blogs", id);
+            const blogSnapshot = await getDoc(blogRef);
+            if (blogSnapshot.exists()) {
+                const blogData = blogSnapshot.data();
+                setLimitBlogs(prevBlogs => {
+                    const updatedBlogs = prevBlogs.map(blog =>
+                        blog.id === id ? { ...blog, ...blogData } : blog
+                    );
+                    return updatedBlogs;
+                });
+            } else {
+                console.log("No such blog found!");
+            }
+        } catch (error) {
+            console.error("Error fetching the blog:", error);
+        }
+    };
+
+    // Function to handle liking a blog
     const like = async (id) => {
         setLoading(true);
         const likedBlogs = user.likedBlogs;
-        const blog = blogs.find((b) => b.id === id);
+        const blog = memoizedBlogs.find((b) => b.id === id);
 
         if (likedBlogs.includes(id)) {
             await updateDoc(doc(collectionRef2, currentUser.uid), {
@@ -63,34 +114,70 @@ const AllBlogs = () => {
             setLiked([...likedBlogs, id]);
             await updateDoc(doc(collectionRef, id), { likes: blog.likes + 1 });
         }
-        getAllUsers();
-        getAllBlog();
+        fetchoneBlog(id);
+        fetchUser(currentUser.uid);
         setLoading(false);
     };
 
-    useEffect(() => {
-        getAllBlog();
-        getAllUsers();
+    // Function to handle adding a comment
+    const comments = async (id, e) => {
+        e.preventDefault();
+        setLoading(true);
+        const blog = memoizedBlogs.find((b) => b.id === id);
+        const prevComments = blog.comments || [];
+        const newComment = user.name + " :  " + commentState[id] || "";
 
-        // Sync liked state with the user's likedBlogs
+        if (!newComment.trim()) {
+            setLoading(false);
+            return;
+        }
+
+        try {
+            await updateDoc(doc(collectionRef, id), {
+                comments: [...prevComments, newComment],
+            });
+        } catch (error) {
+            console.log("Error updating comments:", error);
+        }
+
+        setLoading(false);
+        fetchUser(currentUser.uid);
+        fetchoneBlog(id);
+        setCommentState(prevState => ({ ...prevState, [id]: "" }));
+    };
+
+    useEffect(() => {
+        // Fetch user data and blogs count on initial load
+        fetchUser(currentUser.uid);
+        fetchTotalBlogsCount().then(count => setTotalBlogs(count));
+
+        const fetchData = async () => {
+            const { data, lastVisibleDoc } = await fetchLimitData("blogs", 3);
+            setLimitBlogs(data);
+            setLastVisible(lastVisibleDoc);
+        };
+
+        fetchData();
+    }, [currentUser.uid]);
+
+    useEffect(() => {
         if (user) {
             setLiked(user.likedBlogs || []);
         }
-    }, [user, getAllUsers]);
+    }, [user]);
 
     return (
         <div className="md:flex-1 md:flex-col md:h-screen md:overflow-auto">
-            {blogs.length === 0 ? (
+            {memoizedBlogs.length === 0 ? (
                 <h1 className="text-lg md:text-2xl font-bold self-center text-white">No blogs found</h1>
             ) : (
                 <h1 className="text-lg   mt-8 md:text-4xl font-bold text-center text-secondary">ALL Blogs</h1>
             )}
-            <div className="flex flex-col gap-12 md:px-8 py-12 md:p-12">
-                {blogs.map((blog) => (
-                    <div key={blog.id} className="border-2 border-gray-600 shadow-2xl md:rounded-lg">
+            <div className="flex flex-col gap-12 md:px-8 py-12 md:p-12 md:mx-12">
+                {memoizedBlogs.map((blog) => (
+                    <div key={blog.id} className="border-2 border-gray-600 bg-gray-800 shadow-2xl md:rounded-lg">
                         <div className="flex justify-between items-center px-6 bg-gray-600">
                             <div className="flex flex-row items-center gap-2  p-2 ">
-                                {/* Profile Picture and Name */}
                                 <img
                                     src={blog.createdBy?.photo || anonymous}
                                     alt="photo"
@@ -98,12 +185,9 @@ const AllBlogs = () => {
                                 />
                                 <p className="text-gray-100 text-sm md:text-base font-semibold">{blog.createdBy?.name || 'Unknown User'}</p>
                             </div>
-
-                            {/* Created Date */}
                             <p className="text-gray-200 text-sm md:text-base font-semibold">{blog.createdAt}</p>
                         </div>
-                        <div className="relative bg-primary p-6 rounded-lg shadow-lg flex flex-col md:flex-row gap-8 md:gap-16">
-                            {/* Left Section - Image and Blog Content */}
+                        <div className="relative  p-6 rounded-lg shadow-lg flex flex-col md:flex-row gap-8 md:gap-16">
                             <div className="flex-1 flex md:gap-2  flex-col">
                                 <h1 className="text-lg md:text-2xl font-bold text-white mb-4">{blog.title}</h1>
                                 <img
@@ -114,6 +198,13 @@ const AllBlogs = () => {
                                 <p className="text-sm md:text-base text-white font-medium mt-4">
                                     {blog.bigDescription.substring(0, 250)}...
                                 </p>
+                                <div className="pt-4">
+                                    {blog.tags && blog.tags.map((b, index) => (
+                                        <div key={index} className="inline-block mx-2 p-[2px] rounded-lg bg-gradient-to-r from-pink-500 to-purple-500">
+                                            <span className="block px-3 py-1 text-white font-semibold rounded-lg bg-gray-800">{b}</span>
+                                        </div>
+                                    ))}
+                                </div>
                                 <Link
                                     className="mt-4 font-semibold text-base md:text-lg text-secondary hover:underline"
                                     to={`/blog/${blog.id}`}
@@ -121,10 +212,7 @@ const AllBlogs = () => {
                                     Read More
                                 </Link>
                             </div>
-
-                            {/* Right Section - Actions (Like, Comments, etc.) */}
-                            <div className="flex flex-col justify-center gap-4 md:w-1/3 ">
-                                {/* Like Button */}
+                            <div className="flex flex-col justify-center gap-4 md:w-1/3 md:mb-20 ">
                                 <div className="flex items-center justify-between text-white">
                                     <p>{blog.likes} Likes</p>
                                     <button
@@ -133,41 +221,22 @@ const AllBlogs = () => {
                                         className={`flex items-center gap-2 ${liked.includes(blog.id) ? "text-[#159cdf]" : "text-white"} 
                                         hover:text-blue-500 focus:outline-none transition-colors duration-300`}
                                     >
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="h-6 w-6"
-                                            fill={`${liked.includes(blog.id) ? "#159cdf" : "none"}`}
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                            strokeWidth="2"
-                                        >
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill={`${liked.includes(blog.id) ? "#159cdf" : "none"}`} viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                                         </svg>
                                         <span className="font-semibold">Like</span>
                                     </button>
                                 </div>
-
-                                {/* Comment Count */}
-                                <div className="text-white">
-                                    Comments: <span className="font-semibold">{blog.comments ? blog.comments.length : 0}</span>
-                                </div>
-
-                                {/* Comment Section */}
+                                <div className="text-white">Comments: <span className="font-semibold">{blog.comments ? blog.comments.length : 0}</span></div>
                                 <div className="bg-gray-800 p-4 rounded-md shadow-inner max-h-40 overflow-y-auto mb-4">
                                     <div className="space-y-2">
-                                        {blog.comments && blog.comments.length > 0 ? (
-                                            blog.comments.map((comment, index) => (
-                                                <p key={index} className="text-sm text-white font-medium">
-                                                    {comment}
-                                                </p>
-                                            ))
-                                        ) : (
+                                        {blog.comments && blog.comments.length > 0 ? blog.comments.map((comment, index) => (
+                                            <p key={index} className="text-sm text-white font-medium">{comment}</p>
+                                        )) : (
                                             <p className="text-sm text-gray-500 italic">No comments yet. Be the first to comment!</p>
                                         )}
                                     </div>
                                 </div>
-
-                                {/* Text Area for New Comment */}
                                 <form className="flex items-center gap-4" onSubmit={(e) => comments(blog.id, e)}>
                                     <textarea
                                         className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
@@ -187,21 +256,36 @@ const AllBlogs = () => {
                                         disabled={loading}
                                         className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none transition-colors duration-300"
                                     >
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="h-5 w-5"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                            strokeWidth="2"
-                                        >
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
                                         </svg>
                                     </button>
                                 </form>
                             </div>
                         </div>
-                    </div>))}
+                    </div>
+                ))}
+                {blogLoading ? (
+                    <div className="text-center">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 1 }}
+                            className="w-12 h-12 border-t-4 border-blue-500 border-solid rounded-full mx-auto animate-spin"
+                        />
+                    </div>
+                ) : hasMore ? (
+                    <div className="text-center">
+                        <button
+                            onClick={fetchMoreBlogs}
+                            className="text-white bg-blue-500 px-4 py-2 rounded-md mt-8 hover:bg-blue-600 focus:outline-none transition-colors duration-300"
+                        >
+                            Load More Blogs
+                        </button>
+                    </div>
+                ) : (
+                    <p className="text-white text-center mt-8">No more blogs to load</p>
+                )}
             </div>
         </div>
     );

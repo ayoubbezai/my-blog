@@ -9,6 +9,7 @@ const AddBlog = () => {
 
     const titleRef = useRef("")
     const bigDescRef = useRef("")
+    const tagRef = useRef("")
     const [loading, setLoading] = useState(false)
     const { getAllBlog, fetchUserData, userData } = useAuth()
     const [image, setImage] = useState(null);
@@ -39,8 +40,10 @@ const AddBlog = () => {
             setUrl(cloudData.url);
             console.log(cloudData.url);
             const currentDate = new Date();
-            const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`;
+            const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate() + 1).padStart(2, '0')}`;
             fetchUserData()
+
+            const tags = tagRef.current.value.split(",")
 
             const blogdata = {
                 "title": titleRef.current.value,
@@ -52,6 +55,7 @@ const AddBlog = () => {
                     "name": userData.name,
                     "photo": userData.profile,
                 },
+                "tags": tags
             }
 
             await addDoc(data, blogdata)
@@ -82,6 +86,8 @@ const AddBlog = () => {
             <form className="flex flex-col gap-4  p-4 rounded-md w-1/2" onSubmit={handleSubmit}>
                 <input type="text" placeholder="Title" className="w-full p-2 rounded-md border-2 " ref={titleRef} required />
                 <textarea type="text" placeholder="big description" className="w-full p-2 rounded-md border-2   " ref={bigDescRef} required />
+
+                <input type="text" placeholder="enter tags u wanna do ',' between them" className="w-full p-2 rounded-md border-2 " ref={tagRef} required />
 
                 <div className="input flex justify-center mb-5">
                     <label

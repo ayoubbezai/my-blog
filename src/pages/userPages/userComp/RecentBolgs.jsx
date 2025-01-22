@@ -1,12 +1,41 @@
-import { useEffect } from "react";
-import { useAuth } from "../../../context/AuthContext";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getFirestore, doc, collection, getDocs, query, limit } from "firebase/firestore"
 
+
+const db = getFirestore()
 const RecentBlogs = () => {
-    const { blogs, getAllBlog } = useAuth();
+
+    const [blogs, setBlogs] = useState([])
+
+    const fetchLimiteddata = async (collectionName, limitCount) => {
+        try {
+            const collectionRef = collection(db, collectionName);
+            const q = query(collectionRef, limit(limitCount))
+            const querySnapshot = await getDocs(q)
+            const data = querySnapshot.docs.map(doc => (
+                {
+                    id: doc.id,
+                    ...doc.data()
+                }
+            ))
+            console.log(data)
+            return data;
+        } catch {
+            console.log("error")
+        }
+
+
+    }
 
     useEffect(() => {
-        getAllBlog();
+        const fetchData = async () => {
+            const data = await fetchLimiteddata("blogs", 4)
+            setBlogs(data)
+
+        }
+
+        fetchData()
     }, []);
 
     return (

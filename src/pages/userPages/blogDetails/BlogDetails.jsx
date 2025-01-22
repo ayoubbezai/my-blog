@@ -113,7 +113,7 @@ const BlogDetails = () => {
         <div className="flex flex-col md:flex-row min-h-screen bg-primary">
             <NavBar />
             <div className="flex-1  md:p-16 bg-primary shadow-lg md:h-screen md:overflow-y-auto">
-                <div className="max-w-4xl mx-auto bg-gray-800 rounded-lg shadow-lg p-6">
+                <div className="max-w-4xl mx-auto my-8 bg-gray-800 rounded-lg shadow-lg p-6">
                     <div className="flex items-center gap-4 mb-6">
                         <img
                             src={blog.createdBy?.photo || anonymous}
@@ -121,7 +121,7 @@ const BlogDetails = () => {
                             className="w-12 h-12 rounded-full border-2 border-gray-300"
                         />
                         <div>
-                            <p className="text-white text-lg font-semibold">{blog.createdBy?.name || "Unknown Author"}</p>
+                            <p className="text-gray-100 text-sm md:text-base font-semibold">{blog.createdBy?.name || "Unknown Author"}</p>
                             <p className="text-gray-400 text-sm">{blog.createdAt}</p>
                         </div>
                     </div>
@@ -134,7 +134,7 @@ const BlogDetails = () => {
                     <p className="text-gray-300 mb-6">{blog.bigDescription}</p>
                     <div className="pt-4 my-3 mb-10">
                         {blog.tags && blog.tags.map((b, index) => (
-                            <div key={index} className="inline-block mx-2 p-[2px] rounded-lg bg-gradient-to-r from-pink-500 to-purple-500">
+                            <div key={index} className="inline-block m-2 p-[2px] rounded-lg bg-gradient-to-r from-pink-500 to-purple-500">
                                 <span className="block px-3 py-1 text-white font-semibold rounded-lg bg-gray-800">{b}</span>
                             </div>
                         ))}

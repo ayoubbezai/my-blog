@@ -12,6 +12,8 @@ import BlogsEdit from "./pages/adminPages/blogsedit/BlogsEdit";
 import Profile from "./pages/commonPages/profile/Profile";
 import BlogDetails from "./pages/userPages/blogDetails/BlogDetails"
 import LikedBlogs from "./pages/userPages/likedBlogs/LikedBlogs"
+import SearchBlog from "./pages/userPages/searchedBlogs/SearchBlog";
+
 function App() {
   return (
     < Router >
@@ -29,6 +31,7 @@ function App() {
           </Route>
           <Route element={<ProtectedRouteUser />}>
             <Route path="/blogs" element={<Blogs />} />
+            <Route path="/blogs/:query" element={<SearchBlog />} />
             <Route path="/likedblogs" element={<LikedBlogs />} />
             <Route path="/blog/:id" element={<BlogDetails />} />
 

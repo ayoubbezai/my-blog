@@ -1,12 +1,14 @@
 import { useAuth } from "../../../context/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getFirestore, doc, collection, updateDoc, query, limit, startAfter, getDocs, getDoc } from "firebase/firestore";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import anonymous from "../../../assets/anonymous.png";
 import { motion } from 'framer-motion';
 
 const AllBlogs = () => {
     const { currentUser } = useAuth();
+    const nav = useNavigate()
+    const searchRef = useRef("")
     const [loading, setLoading] = useState(false);
     const [blogLoading, setBlogLoading] = useState(false);
     const [user, setUser] = useState({});
@@ -183,16 +185,47 @@ const AllBlogs = () => {
 
     }, [user, blogsLoaded, totalBlogs]);
 
+    const handleSearch = (e) => {
+        e.preventDefault(); // Fix typo
+        const query = searchRef.current.value.trim(); // Trim whitespace
+        if (query) {
+            nav(`/blogs/${query}`); // Ensure the route is correct
+        } else {
+            console.log("Search query is empty"); // Provide feedback if empty
+        }
+    };
+
+
     return (
         <div className="md:flex-1 md:flex-col md:h-screen md:overflow-auto">
+            <div className="flex justify-center items-center my-8">
+                <form onSubmit={handleSearch} className="relative w-full max-w-lg">
+                    <input
+                        ref={searchRef}
+                        type="text"
+                        placeholder="Explore inspiring blogs..."
+                        className="w-full px-4 py-2 text-lg rounded-full border-2 border-transparent shadow-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                    />
+                    <button
+                        type="submit"
+                        className="absolute right-0 top-0 bottom-0 px-4 py-2 bg-gradient-to-r from-secondary to-green-500 text-white font-bold rounded-full hover:shadow-lg hover:from-green-500 hover:to-secondary transition-all duration-300"
+                    >
+                        🔍
+                    </button>
+                </form>
+            </div>
             {memoizedBlogs.length === 0 ? (
-                <h1 className="text-lg md:text-2xl font-bold self-center text-white">No blogs found</h1>
+                <h1 className="text-lg md:text-3xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-secondary to-green-500 animate-pulse">
+                    No blogs found, but don`t stop exploring!
+                </h1>
             ) : (
-                <h1 className="text-lg   mt-8 md:text-4xl font-bold text-center text-secondary">ALL Blogs</h1>
+                <h1 className="text-lg mt-8 md:text-4xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-secondary to-green-500">
+                    Discover the Latest Stories ✨
+                </h1>
             )}
             <div className="flex flex-col gap-12 md:px-8 py-12 md:p-12 md:mx-12">
                 {memoizedBlogs.map((blog) => (
-                    <div key={blog.id} className="border-2 border-gray-600 bg-gray-800 shadow-2xl md:rounded-lg">
+                    <div key={blog.id} className="  border-2 border-gray-600 bg-gray-800 shadow-2xl md:rounded-lg">
                         <div className="flex justify-between items-center px-6 bg-gray-600">
                             <div className="flex flex-row items-center gap-2  p-2 ">
                                 <img
@@ -217,7 +250,7 @@ const AllBlogs = () => {
                                 </p>
                                 <div className="pt-4 my-3">
                                     {blog.tags && blog.tags.map((b, index) => (
-                                        <div key={index} className="inline-block m-2 p-[2px] rounded-lg bg-gradient-to-r from-pink-500 to-purple-500">
+                                        <div key={index} className="inline-block m-2 p-[2px] rounded-lg bg-gradient-to-r from-secondary to-green-500">
                                             <span className="block px-3  py-1 text-white font-semibold rounded-lg bg-gray-800">{b}</span>
                                         </div>
                                     ))}

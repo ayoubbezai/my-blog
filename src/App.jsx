@@ -10,6 +10,7 @@ import ProtectedRouteUser from "./utils/ProtectedUser";
 import ProtectedRouteAdmin from "./utils/ProtectedAdmin";
 import BlogsEdit from "./pages/adminPages/blogsedit/BlogsEdit";
 import Profile from "./pages/commonPages/profile/Profile";
+import OtherProfile from "./pages/commonPages/profile/OtherProfile";
 import BlogDetails from "./pages/userPages/blogDetails/BlogDetails"
 import LikedBlogs from "./pages/userPages/likedBlogs/LikedBlogs"
 import SearchBlog from "./pages/userPages/searchedBlogs/SearchBlog";
@@ -26,6 +27,8 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/:profile" element={<OtherProfile />} />
+
 
 
           </Route>

@@ -11,7 +11,7 @@ const AddBlog = () => {
     const bigDescRef = useRef("")
     const tagRef = useRef("")
     const [loading, setLoading] = useState(false)
-    const { getAllBlog, fetchUserData, userData } = useAuth()
+    const { getAllBlog, fetchUserData, userData, currentUser } = useAuth()
     const [image, setImage] = useState(null);
     const [url, setUrl] = useState('');
 
@@ -54,6 +54,7 @@ const AddBlog = () => {
                 "createdBy": {
                     "name": userData.name,
                     "photo": userData.profile,
+                    "userId": currentUser.uid
                 },
                 "tags": tags
             }

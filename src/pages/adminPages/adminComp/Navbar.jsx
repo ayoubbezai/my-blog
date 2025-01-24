@@ -7,9 +7,9 @@ import { useState, useEffect } from "react";
 
 
 const NavBar = ({ hoverd }) => {
-    const { logout, userData, fetchUserData ,abvName} = useAuth();
+    const { logout, userData, fetchUserData, abvName } = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
- 
+
 
     useEffect(() => {
         fetchUserData()
@@ -22,7 +22,7 @@ const NavBar = ({ hoverd }) => {
         navigate("/login");
     };
 
- 
+
 
 
 
@@ -62,7 +62,7 @@ const NavBar = ({ hoverd }) => {
 
             <div className={`flex items-center gap-2 flex-row ${menuOpen && "hidden"}`}>
 
-                {userData.profile.trim() ? <img src={userData.profile} alt="profile" className="max-w-12 max-h-12 rounded-full aspect-square" /> : <p className="text-xl font-bold text-center bg-white rounded-full w-10 h-10 flex items-center justify-center text-primary mr-4"> {abvName} </p>}
+                {userData.profile ? <img src={userData.profile} alt="profile" className="max-w-12 max-h-12 rounded-full aspect-square" /> : <p className="text-xl font-bold text-center bg-white rounded-full w-10 h-10 flex items-center justify-center text-primary mr-4"> {abvName} </p>}
 
                 <div className="flex flex-col">
                     <p className="text-sm font-bold text-center">{userData.name}</p>

@@ -233,7 +233,7 @@ const AllBlogs = () => {
                                     alt="photo"
                                     className="w-10 h-10 rounded-full border-2 border-gray-300"
                                 />
-                                <p className="text-gray-100 text-sm md:text-base font-semibold">{blog.createdBy?.name || 'Unknown User'}</p>
+                                <Link to={`/profile/${blog.createdBy?.userId}`} className="text-gray-100 text-sm md:text-base font-semibold">{blog.createdBy?.name || 'Unknown User'}</Link>
                             </div>
                             <p className="text-gray-200 text-sm md:text-base font-semibold">{blog.createdAt}</p>
                         </div>
@@ -350,7 +350,7 @@ const AllBlogs = () => {
                     <p className="text-white text-center mt-8">No more blogs to load</p>
                 )}
             </div>
-        </div>
+        </div >
     );
 };
 

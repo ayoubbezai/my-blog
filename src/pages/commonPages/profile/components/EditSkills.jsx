@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { updateDoc, doc } from "firebase/firestore";
 import toast from "react-hot-toast";
 import { useAuth } from "../../../../context/AuthContext";
@@ -13,7 +13,13 @@ const EditSkills = ({ fetchUserData, userData }) => {
 
     // State to manage visibility of the input field and skills value
     const [isEditing, setIsEditing] = useState(false);
-    const [skills, setSkills] = useState(userData?.skillsList?.join(", ") || "");
+    const [skills, setSkills] = useState("");
+
+    useEffect(() => {
+        if (userData) {
+            setSkills(userData?.skillsList?.join(", "))
+        }
+    }, [userData])
 
     const updateSkills = async (e) => {
         e.preventDefault();

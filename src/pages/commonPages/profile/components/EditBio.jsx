@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { updateDoc, doc } from "firebase/firestore";
 import toast from "react-hot-toast";
 import { useAuth } from "../../../../context/AuthContext";
@@ -9,11 +9,18 @@ const db = getFirestore();
 const data2 = collection(db, "users");
 
 const EditBio = ({ fetchUserData, userData }) => {
-    const { currentUser } = useAuth();
+    const { currentUser ,userData } = useAuth();
+    const [bio,setBio]= useState("")
+    
+     useEffect(() => {
+            if (userData) {
+                setBio(userData.bio)
+            }
+        },[userData])
+
 
     // State to manage visibility of the input field and bio value
     const [isEditing, setIsEditing] = useState(false);
-    const [bio, setBio] = useState(userData?.bio);
 
     const updateBio = async (e) => {
         e.preventDefault();

@@ -172,11 +172,11 @@ const Profile = () => {
                                     type="text"
                                     placeholder="Enter new name"
                                     ref={nameRef}
-                                    className="w-full border-2 border-secondary rounded-md p-2 resize-none focus:outline-none focus:ring-2 focus:ring-secondary"
+                                    className="w-full "
                                 ></input>
                                 <button
                                     type="submit"
-                                    className="bg-secondary text-white px-6 py-2 rounded-md font-semibold transition-all hover:scale-105"
+                                    className="bg-secondary text-white px-4 md:px-6 py-1 md:py-2 font-medium  md:font-semibold rounded-md transition-all hover:scale-105"
                                 >
                                     Update
                                 </button>

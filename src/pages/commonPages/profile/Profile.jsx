@@ -144,13 +144,13 @@ const Profile = () => {
                                 <div className="pt-4 my-3">
                                     {userData.skillsList && userData.skillsList.map((s, index) => (
                                         <div key={index} className="inline-block m-2 p-[2px] rounded-lg bg-gradient-to-r from-secondary to-green-500">
-                                            <span className="block px-3 md:px-5 py-1 md:py-2 text-white font-semibold rounded-lg bg-gray-800">{s}</span>
+                                            <span className="block px-3 md:px-5 py-1 md:py-2 text-white font-medium md:font-semibold rounded-lg bg-gray-800">{s}</span>
                                         </div>
                                     ))}
                                 </div>
                                 <button
                                     onClick={handleLogout}
-                                    className=" bg-secondary text-white px-6 py-2 rounded-md text-lg font-semibold mt-8 self-center transition-all md:hover:scale-105"
+                                    className=" bg-secondary text-white px-6 py-2 rounded-md md:text-lg font-medium md:font-semibold mt-8 self-center transition-all md:hover:scale-105"
                                 >
                                     Logout
                                 </button>
@@ -168,15 +168,14 @@ const Profile = () => {
                                 Update Name
                             </h2>
                             <form className="flex flex-col md:flex-row space-y-4 md:space-y-0 items-center space-x-4" onSubmit={updateName}>
-                                <input
-                                    type="text"
-                                    placeholder="Enter new name"
+                                <textarea
+                                    placeholder="Enter your name..."
                                     ref={nameRef}
-                                    className="w-full "
-                                ></input>
+                                    className="w-full border-2 border-secondary rounded-md p-2 h-12 resize-none focus:outline-none focus:ring-2 focus:ring-secondary"
+                                ></textarea>
                                 <button
                                     type="submit"
-                                    className="bg-secondary text-white px-4 md:px-6 py-1 md:py-2 font-medium  md:font-semibold rounded-md transition-all hover:scale-105"
+                                    className="bg-secondary text-white px-6 py-2 rounded-md font-semibold transition-all hover:scale-105"
                                 >
                                     Update
                                 </button>
@@ -269,7 +268,7 @@ const Profile = () => {
                                 <button
                                     onClick={deletePicture}
                                     disabled={loading}
-                                    className={`bg-red-500 text-white mt-6 px-6 py-2 rounded-md font-semibold ${loading ? "opacity-50 cursor-not-allowed" : "hover:scale-105"
+                                    className={`bg-red-500 text-white mt-10 md:mt-6 px-6 py-2 rounded-md font-semibold ${loading ? "opacity-50 cursor-not-allowed" : "hover:scale-105"
                                         }`}
                                 >
                                     {loading ? "Loading..." : "Remove Picture"}

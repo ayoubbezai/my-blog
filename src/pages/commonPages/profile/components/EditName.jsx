@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { updateDoc, doc } from "firebase/firestore";
 import toast from "react-hot-toast";
 import { useAuth } from "../../../../context/AuthContext";
@@ -15,19 +15,26 @@ const EditName = ({ fetchUserData, userData }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [name, setName] = useState("");
 
-    useEffect(() => {
-        if (userData) {
-            setName(userData.name)
-        }
-    },[userData])
+    const startEditing = () => {
+        // Initialize name state when editing starts
+        setName(userData?.name || "");
+        setIsEditing(true);
+    };
 
     const updateName = async (e) => {
         e.preventDefault();
-        if (!name) return toast.error("Name cannot be empty.");
-        await updateDoc(doc(data2, currentUser.uid), { name });
-        toast.success("Name updated successfully.");
-        setIsEditing(false); // Hide the input after updating
-        fetchUserData();
+        if (!name) {
+            return toast.error("Name cannot be empty.");
+        }
+        try {
+            await updateDoc(doc(data2, currentUser.uid), { name });
+            toast.success("Name updated successfully.");
+            setIsEditing(false); // Hide the input after updating
+            fetchUserData(); // Refresh user data
+        } catch (error) {
+            console.error("Error updating name:", error);
+            toast.error("Failed to update name. Please try again.");
+        }
     };
 
     return (
@@ -37,7 +44,7 @@ const EditName = ({ fetchUserData, userData }) => {
                     User Name
                 </h1>
                 <PenIcon
-                    onClick={() => setIsEditing(!isEditing)}
+                    onClick={startEditing} // Initialize name and set editing mode
                     className="cursor-pointer hover:text-secondary transition"
                 />
             </div>
@@ -60,7 +67,7 @@ const EditName = ({ fetchUserData, userData }) => {
                     </form>
                 ) : (
                     <h2 className="text-lg md:text-xl font-medium text-gray-200">
-                        {userData.name || "Loading..."}
+                        {userData?.name || "Loading..."}
                     </h2>
                 )}
             </div>

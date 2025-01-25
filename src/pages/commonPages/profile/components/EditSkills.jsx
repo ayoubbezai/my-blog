@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { updateDoc, doc } from "firebase/firestore";
 import toast from "react-hot-toast";
 import { useAuth } from "../../../../context/AuthContext";
@@ -11,15 +11,14 @@ const data2 = collection(db, "users");
 const EditSkills = ({ fetchUserData, userData }) => {
     const { currentUser } = useAuth();
 
-    // State to manage visibility of the input field and skills value
     const [isEditing, setIsEditing] = useState(false);
     const [skills, setSkills] = useState("");
 
-    useEffect(() => {
-        if (userData) {
-            setSkills(userData?.skillsList?.join(", "))
-        }
-    }, [userData])
+    const startEditing = () => {
+        // Set skills when editing starts to ensure it's initialized
+        setSkills(userData?.skillsList?.join(", ") || "");
+        setIsEditing(true);
+    };
 
     const updateSkills = async (e) => {
         e.preventDefault();
@@ -27,10 +26,15 @@ const EditSkills = ({ fetchUserData, userData }) => {
         if (skillsList.length === 0 || skillsList.some((skill) => !skill)) {
             return toast.error("Skills cannot be empty.");
         }
-        await updateDoc(doc(data2, currentUser.uid), { skillsList });
-        toast.success("Skills updated successfully.");
-        setIsEditing(false); // Hide the input after updating
-        fetchUserData();
+        try {
+            await updateDoc(doc(data2, currentUser.uid), { skillsList });
+            toast.success("Skills updated successfully.");
+            setIsEditing(false);
+            fetchUserData(); // Refresh user data
+        } catch (error) {
+            console.error("Error updating skills:", error);
+            toast.error("Failed to update skills. Please try again.");
+        }
     };
 
     return (
@@ -40,7 +44,7 @@ const EditSkills = ({ fetchUserData, userData }) => {
                     Skills
                 </h2>
                 <PenIcon
-                    onClick={() => setIsEditing(!isEditing)}
+                    onClick={startEditing} // Start editing and initialize skills
                     className="cursor-pointer hover:text-secondary transition"
                 />
             </div>
@@ -63,7 +67,7 @@ const EditSkills = ({ fetchUserData, userData }) => {
                     </form>
                 ) : (
                     <div className="flex flex-wrap">
-                        {userData.skillsList && userData.skillsList.map((skill, index) => (
+                        {userData?.skillsList && userData.skillsList.map((skill, index) => (
                             <div
                                 key={index}
                                 className="m-2 p-[2px] rounded-lg bg-gradient-to-r from-secondary to-green-500"
@@ -73,7 +77,7 @@ const EditSkills = ({ fetchUserData, userData }) => {
                                 </span>
                             </div>
                         ))}
-                        {!userData.skillsList?.length && (
+                        {!userData?.skillsList?.length && (
                             <p className="text-gray-200">
                                 No skills available. Click the pen icon to add some!
                             </p>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { updateDoc, doc } from "firebase/firestore";
 import toast from "react-hot-toast";
 import { useAuth } from "../../../../context/AuthContext";
@@ -10,25 +10,31 @@ const data2 = collection(db, "users");
 
 const EditBio = ({ fetchUserData, userData }) => {
     const { currentUser } = useAuth();
-    const [bio, setBio] = useState("")
-
-    useEffect(() => {
-        if (userData) {
-            setBio(userData.bio)
-        }
-    }, [userData])
-
 
     // State to manage visibility of the input field and bio value
     const [isEditing, setIsEditing] = useState(false);
+    const [bio, setBio] = useState("");
+
+    const startEditing = () => {
+        // Initialize bio state when editing starts
+        setBio(userData?.bio || "");
+        setIsEditing(true);
+    };
 
     const updateBio = async (e) => {
         e.preventDefault();
-        if (!bio) return toast.error("Bio cannot be empty.");
-        await updateDoc(doc(data2, currentUser.uid), { bio });
-        toast.success("Bio updated successfully.");
-        setIsEditing(false); // Hide the input after updating
-        fetchUserData();
+        if (!bio) {
+            return toast.error("Bio cannot be empty.");
+        }
+        try {
+            await updateDoc(doc(data2, currentUser.uid), { bio });
+            toast.success("Bio updated successfully.");
+            setIsEditing(false); // Hide the input after updating
+            fetchUserData(); // Refresh user data
+        } catch (error) {
+            console.error("Error updating bio:", error);
+            toast.error("Failed to update bio. Please try again.");
+        }
     };
 
     return (
@@ -38,7 +44,7 @@ const EditBio = ({ fetchUserData, userData }) => {
                     Bio
                 </h2>
                 <PenIcon
-                    onClick={() => setIsEditing(!isEditing)}
+                    onClick={startEditing} // Initialize bio and set editing mode
                     className="cursor-pointer hover:text-secondary transition"
                 />
             </div>
@@ -61,7 +67,7 @@ const EditBio = ({ fetchUserData, userData }) => {
                     </form>
                 ) : (
                     <p className="text-lg text-gray-200 mt-2">
-                        {userData.bio || "No bio available. Click the pen icon to add one!"}
+                        {userData?.bio || "No bio available. Click the pen icon to add one!"}
                     </p>
                 )}
             </div>

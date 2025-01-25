@@ -163,17 +163,17 @@ const Profile = () => {
                     {/* Update Name */}
                     <div className="bg-gray-800 my-10 p-8 rounded-lg shadow-lg">
                         <section className="mb-12 flex flex-col font-bold">
-                            <h1 className="text-white my-8 text-4xl self-center"> Updates </h1>
-                            <h2 className="text-2xl font-bold text-secondary mb-4">
+                            <h1 className="text-white my-8 text-xl md:text-4xl self-center"> Updates </h1>
+                            <h2 className="text-lg md:text-2xl font-semibold text-secondary mb-4">
                                 Update Name
                             </h2>
-                            <form className="flex items-center space-x-4" onSubmit={updateName}>
+                            <form className="flex flex-col md:flex-row space-y-4 md:space-y-0 items-center space-x-4" onSubmit={updateName}>
                                 <input
                                     type="text"
                                     placeholder="Enter new name"
                                     ref={nameRef}
-                                    className="flex-1 border-2 border-secondary rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-secondary"
-                                />
+                                    className="w-full border-2 border-secondary rounded-md p-2 resize-none focus:outline-none focus:ring-2 focus:ring-secondary"
+                                ></input>
                                 <button
                                     type="submit"
                                     className="bg-secondary text-white px-6 py-2 rounded-md font-semibold transition-all hover:scale-105"
@@ -185,7 +185,7 @@ const Profile = () => {
 
                         {/* Update/Add Bio */}
                         <section className="mb-12">
-                            <h2 className="text-2xl font-bold text-secondary mb-4">
+                            <h2 className="text-lg md:text-2xl font-semibold text-secondary mb-4">
                                 {userData.bio ? "Update Bio" : "Add Bio"}                        </h2>
                             <form
                                 className="flex flex-col space-y-4"
@@ -205,7 +205,7 @@ const Profile = () => {
                         </section>
 
                         <section className="mb-12">
-                            <h2 className="text-2xl font-bold text-secondary mb-4">
+                            <h2 className="text-lg md:text-2xl font-semibold text-secondary mb-4">
                                 {userData.skillsList ? "Update Skills" : "Add Skills"}                        </h2>
                             <form
                                 className="flex flex-col space-y-4"
@@ -226,7 +226,7 @@ const Profile = () => {
 
                         {/* Add/Update Picture */}
                         <section>
-                            <h2 className="text-2xl font-bold text-secondary mb-4">
+                            <h2 className="text-lg md:text-2xl font-semibold text-secondary mb-4">
                                 {userData.profile ? "Update Picture" : "Add Picture"}
                             </h2>
                             <form

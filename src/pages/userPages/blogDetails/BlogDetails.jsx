@@ -134,7 +134,7 @@ const BlogDetails = () => {
                     <p className="text-gray-300 mb-6">{blog.bigDescription}</p>
                     <div className="pt-4 my-3 mb-10">
                         {blog.tags && blog.tags.map((b, index) => (
-                            <div key={index} className="inline-block m-2 p-[2px] rounded-lg bg-gradient-to-r from-pink-500 to-purple-500">
+                            <div key={index} className="inline-block m-2 p-[2px] rounded-lg bg-gradient-to-r from-secondary to-green-500">
                                 <span className="block px-3 py-1 text-white font-semibold rounded-lg bg-gray-800">{b}</span>
                             </div>
                         ))}

@@ -6,25 +6,24 @@ import { getFirestore, doc, getDoc } from "firebase/firestore";
 
 const LikedBlogs = () => {
     const { fetchUserData, userData } = useAuth();
-    const likedBlogsId = userData.likedBlogs
-    const [likedBlogs, setLikedBlogs] = useState([])
-    const memorizedBlogs = useMemo(() => likedBlogs, [likedBlogs])
+    const likedBlogsId = userData.likedBlogs;
+    const [likedBlogs, setLikedBlogs] = useState([]);
+    const memorizedBlogs = useMemo(() => likedBlogs, [likedBlogs]);
 
     useEffect(() => {
         fetchUserData();
         try {
             const getBlog = async () => {
-                const likedBlogs = await fetchBlogsByIds(likedBlogsId)
-                setLikedBlogs(likedBlogs)
-            }
-            getBlog()
-
+                const likedBlogs = await fetchBlogsByIds(likedBlogsId);
+                setLikedBlogs(likedBlogs);
+            };
+            getBlog();
         } catch {
-            console.log("error")
+            console.log("error");
         }
     }, [fetchUserData, likedBlogsId]);
 
-    console.log(memorizedBlogs)
+    console.log(memorizedBlogs);
 
     const fetchBlogsByIds = async (ids) => {
         const db = getFirestore();
@@ -48,15 +47,15 @@ const LikedBlogs = () => {
         <div className="flex flex-col md:flex-row min-h-screen bg-primary">
             <NavBar hoverd={3} />
             <div className="flex-1 p-8 md:p-16 bg-primary shadow-lg md:h-screen md:overflow-y-auto">
-                <h1 className="text-3xl font-semibold text-center text-secondary mb-8">
+                <h1 className="text-4xl font-bold text-center bg-gradient-to-r from-secondary to-green-500 text-transparent bg-clip-text mb-10">
                     {memorizedBlogs ? "Liked Blogs" : "There are no liked blogs"}
                 </h1>
 
-                <div className=" grid grid-cols-1 md:grid-cols-2  2xl:grid-cols-3 gap-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-y-8">
                     {memorizedBlogs.map((b) => (
                         <div
                             key={b.id}
-                            className="p-6 bg-primary rounded-lg border-2 border-secondary shadow-md hover:shadow-xl transition-shadow duration-300 sm:w-full lg:w-[80%] mx-auto"
+                            className="p-6 bg-gray-800 rounded-lg border-2 border-transparent shadow-lg hover:shadow-xl transition-shadow duration-300 sm:w-full lg:w-[80%] mx-auto "
                         >
                             <img
                                 src={b.imageUrl}

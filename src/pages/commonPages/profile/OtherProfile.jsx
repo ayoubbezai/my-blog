@@ -71,6 +71,13 @@ const OtherProfile = () => {
                                 <span className="font-semibold text-gray-300">Bio:</span>{" "}
                                 {profileData.bio || "No bio available."}
                             </p>
+                            <div className="pt-4 my-3">
+                                {profileData.skillsList && profileData.skillsList.map((s, index) => (
+                                    <div key={index} className="inline-block m-2 p-[2px] rounded-lg bg-gradient-to-r from-secondary to-green-500">
+                                        <span className="block px-5  py-2 text-white font-semibold rounded-lg bg-gray-800">{s}</span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     ) : (
                         <p className="text-lg text-gray-300 text-center">Fetching user details...</p>

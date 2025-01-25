@@ -11,12 +11,13 @@ const data2 = collection(db, "users");
 
 const Profile = () => {
     const navigate = useNavigate();
-    const { logout, currentUser, fetchUserData, userData, abvName } = useAuth();
+    const { logout, currentUser, fetchUserData, userData } = useAuth();
 
     const [image, setImage] = useState(null);
     const [loading, setLoading] = useState(false);
     const nameRef = useRef();
     const bioRef = useRef();
+    const skillsRef = useRef();
 
     const addPic = async (e) => {
         e.preventDefault();
@@ -66,6 +67,16 @@ const Profile = () => {
         bioRef.current.value = "";
         fetchUserData();
     };
+    const updateSkills = async (e) => {
+        e.preventDefault();
+        const skills = skillsRef.current.value;
+        const skillsList = skills.split(",")
+        if (!skills) return toast.error("skills cannot be empty.");
+        await updateDoc(doc(data2, currentUser.uid), { skillsList });
+        toast.success("Skills updated successfully.");
+        skillsRef.current.value = "";
+        fetchUserData();
+    };
 
     const deletePicture = async () => {
         try {
@@ -92,14 +103,15 @@ const Profile = () => {
 
     return (
         <div className=" h-screen  bg-primary   md:flex flex-col md:flex-row ">
+
             {/* Navbar */}
             {userData.role === "admin" && <NavbarAdmin hoverd={3} />}
             {userData.role === "user" && <NavbarUser hoverd={4} />}
 
             {/* Main Content */}
 
-            <div className="md:flex-1 md:flex-col   md:overflow-auto">
-                <div className="w-full md:max-w-4xl  shadow-lg rounded-lg p-6 md:p-12">
+            <div className="md:flex-1 md:flex-col  bg-primary  md:overflow-auto">
+                <div className="w-full md:max-w-4xl mx-auto shadow-lg rounded-lg p-6 md:p-12">
                     {/* Profile Info */}
                     <div className="w-full md:max-w-4xl bg-gray-800 shadow-lg  rounded-lg p-6 md:p-12 text-gray-800">
                         {/* Profile Header */}
@@ -129,6 +141,13 @@ const Profile = () => {
                                     <span className="font-semibold text-gray-300">Bio:</span>{" "}
                                     {userData.bio || "No bio available."}
                                 </p>
+                                <div className="pt-4 my-3">
+                                    {userData.skillsList && userData.skillsList.map((s, index) => (
+                                        <div key={index} className="inline-block m-2 p-[2px] rounded-lg bg-gradient-to-r from-secondary to-green-500">
+                                            <span className="block px-5  py-2 text-white font-semibold rounded-lg bg-gray-800">{s}</span>
+                                        </div>
+                                    ))}
+                                </div>
                                 <button
                                     onClick={handleLogout}
                                     className=" bg-secondary text-white px-6 py-2 rounded-md text-lg font-semibold mt-8 self-center transition-all md:hover:scale-105"
@@ -182,6 +201,26 @@ const Profile = () => {
                                     className="bg-secondary text-white px-6 py-2 rounded-md font-semibold transition-all hover:scale-105"
                                 >
                                     {userData.bio ? "Update Bio" : "Add Bio"}                              </button>
+                            </form>
+                        </section>
+
+                        <section className="mb-12">
+                            <h2 className="text-2xl font-bold text-secondary mb-4">
+                                {userData.skillsList ? "Update Skills" : "Add Skills"}                        </h2>
+                            <form
+                                className="flex flex-col space-y-4"
+                                onSubmit={updateSkills}
+                            >
+                                <textarea
+                                    placeholder="Enter your skils `put , between them `..."
+                                    ref={skillsRef}
+                                    className="w-full border-2 border-secondary rounded-md p-2 h-24 resize-none focus:outline-none focus:ring-2 focus:ring-secondary"
+                                ></textarea>
+                                <button
+                                    type="submit"
+                                    className="bg-secondary text-white px-6 py-2 rounded-md font-semibold transition-all hover:scale-105"
+                                >
+                                    {userData.skillsList ? "Update Skills" : "Add Skills"}                              </button>
                             </form>
                         </section>
 

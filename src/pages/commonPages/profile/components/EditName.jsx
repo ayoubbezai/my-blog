@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { updateDoc, doc } from "firebase/firestore";
 import toast from "react-hot-toast";
 import { useAuth } from "../../../../context/AuthContext";
@@ -13,7 +13,13 @@ const EditName = ({ fetchUserData, userData }) => {
 
     // State to manage visibility of the input field and name value
     const [isEditing, setIsEditing] = useState(false);
-    const [name, setName] = useState(userData?.name);
+    const [name, setName] = useState("");
+
+    useEffect(() => {
+        if (userData) {
+            setName(userData.name)
+        }
+    },[userData])
 
     const updateName = async (e) => {
         e.preventDefault();

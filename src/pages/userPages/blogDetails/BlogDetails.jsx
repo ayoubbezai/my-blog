@@ -1,5 +1,5 @@
 import { useAuth } from "../../../context/AuthContext";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { getFirestore, doc, updateDoc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import anonymous from "../../../assets/anonymous.png";
@@ -82,6 +82,7 @@ const BlogDetails = () => {
                 name: user.name,
                 content: commentState,
                 picture: user.profile || anonymous,
+                userId: currentUser.uid
             };
 
             await updateDoc(doc(db, "blogs", id), {
@@ -165,8 +166,7 @@ const BlogDetails = () => {
                                         className="w-10 h-10 rounded-full border-2 border-blue-500"
                                     />
                                     <div>
-                                        <p className="text-gray-300 font-semibold">{comment.name}</p>
-                                        <p className="text-gray-400">{comment.content}</p>
+                                        {comment.userId ? <Link to={`/profile/${comment.userId}`} className="text-sm text-gray-300 font-semibold hover:underline">{comment.name}</Link> : <p className="text-sm text-gray-300 font-semibold ">{comment.name}</p>}                                        <p className="text-gray-400">{comment.content}</p>
                                     </div>
                                 </div>
                             ))

@@ -131,7 +131,7 @@ const BlogDetails = () => {
                         className="rounded-md w-full h-64 object-cover mb-6"
                     />
                     <h1 className="text-3xl text-white font-bold mb-4">{blog.title}</h1>
-                    <p className="text-gray-300 mb-6">{blog.bigDescription}</p>
+                    <p className="text-gray-300 mb-6 break-words">{blog.bigDescription}</p>
                     <div className="pt-4 my-3 mb-10">
                         {blog.tags && blog.tags.map((b, index) => (
                             <div key={index} className="inline-block m-2 p-[2px] rounded-lg bg-gradient-to-r from-secondary to-green-500">

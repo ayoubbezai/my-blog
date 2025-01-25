@@ -245,14 +245,14 @@ const AllBlogs = () => {
                             <p className="text-gray-200 text-sm md:text-base font-semibold">{blog.createdAt}</p>
                         </div>
                         <div className="relative  p-6 rounded-lg shadow-lg flex flex-col md:flex-row gap-8 md:gap-16">
-                            <div className="flex-1 flex md:gap-2  flex-col">
+                            <div className="flex-1 flex md:gap-2  flex-col w-full ">
                                 <h1 className="text-lg md:text-2xl font-bold text-white mb-4">{blog.title}</h1>
                                 <img
                                     src={blog.imageUrl}
                                     alt="Blog visual"
                                     className="rounded-md w-full h-64 object-cover"
                                 />
-                                <p className="text-sm md:text-base text-white font-medium mt-4">
+                                <p className="text-sm md:text-base text-white font-medium mt-4 break-words">
                                     {blog.bigDescription.substring(0, 250)}...
                                 </p>
                                 <div className="pt-4 my-3">

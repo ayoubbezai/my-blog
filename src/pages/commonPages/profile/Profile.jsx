@@ -162,7 +162,7 @@ const Profile = () => {
 
                     {/* Update Name */}
                     <div className="bg-gray-800 my-10 p-8 rounded-lg shadow-lg">
-                        <section className="mb-12 flex flex-col font-bold">
+                        <section className="mb-12 flex flex-col ">
                             <h1 className="text-white my-8 text-xl md:text-4xl self-center"> Updates </h1>
                             <h2 className="text-lg md:text-2xl font-semibold text-secondary mb-4">
                                 Update Name

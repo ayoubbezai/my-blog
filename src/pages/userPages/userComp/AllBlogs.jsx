@@ -296,7 +296,8 @@ const AllBlogs = () => {
                                                     className="w-10 h-10 rounded-full border-2 border-blue-500"
                                                 />
                                                 <div>
-                                                    <Link to={`/profile/${comment.userId}`} className="text-sm text-gray-300 font-semibold hover:underline">{comment.name}</Link>
+                                                    {comment.userId ? <Link to={`/profile/${comment.userId}`} className="text-sm text-gray-300 font-semibold hover:underline">{comment.name}</Link> : <p className="text-sm text-gray-300 font-semibold ">{comment.name}</p>}
+
                                                     <p className="text-sm text-gray-400 mt-1">{comment.content}</p>
                                                 </div>
                                             </div>

@@ -9,14 +9,14 @@ const db = getFirestore();
 const data2 = collection(db, "users");
 
 const EditBio = ({ fetchUserData, userData }) => {
-    const { currentUser ,userData } = useAuth();
-    const [bio,setBio]= useState("")
-    
-     useEffect(() => {
-            if (userData) {
-                setBio(userData.bio)
-            }
-        },[userData])
+    const { currentUser } = useAuth();
+    const [bio, setBio] = useState("")
+
+    useEffect(() => {
+        if (userData) {
+            setBio(userData.bio)
+        }
+    }, [userData])
 
 
     // State to manage visibility of the input field and bio value

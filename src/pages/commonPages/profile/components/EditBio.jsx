@@ -18,7 +18,7 @@ const EditBio = ({ fetchUserData, userData }) => {
     const startEditing = () => {
         // Initialize bio state when editing starts
         setBio(userData?.bio || "");
-        setIsEditing(true);
+        setIsEditing(!isEditing);
     };
 
     const updateBio = async (e) => {

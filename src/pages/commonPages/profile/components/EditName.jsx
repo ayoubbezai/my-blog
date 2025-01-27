@@ -18,7 +18,7 @@ const EditName = ({ fetchUserData, userData }) => {
     const startEditing = () => {
         // Initialize name state when editing starts
         setName(userData?.name || "");
-        setIsEditing(true);
+        setIsEditing(!isEditing);
     };
 
     const updateName = async (e) => {

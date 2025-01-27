@@ -1,239 +1,115 @@
 import { useAuth } from "../../../context/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useMemo, useRef } from "react";
-import anonymous from "../../../assets/anonymous.png";
-import { motion } from 'framer-motion';
-import { fetchUser, fetchTotalBlogsCount, like, comments, fetchLimitData, fetchMoreBlogs, fetchoneBlog } from "../../../utils/helpers"
+import { motion } from "framer-motion";
+import { fetchTotalBlogsCount, fetchLimitData, fetchMoreBlogs } from "../../../utils/helpers";
+import OneBlog from "./OneBlog";
+import LikeAndComments from "./LikeAndComments";
+import BlogHeader from "./BlogHeader";
+import Search from "./Search";
 
 const AllBlogs = () => {
     const { currentUser } = useAuth();
-    const nav = useNavigate()
-    const searchRef = useRef("")
-    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+    const searchRef = useRef(null); // Fixed: Added `searchRef` declaration
+
+    const [searchValue, setSearchValue] = useState("");
     const [blogLoading, setBlogLoading] = useState(false);
-    const [user, setUser] = useState({});
-    const [totalBlogs, setTotalBlogs] = useState(false);
-    const [blogsLoaded, setBlogsLoaded] = useState(3);
+    const [totalBlogs, setTotalBlogs] = useState(0);
     const [lastVisible, setLastVisible] = useState(null);
-    const [liked, setLiked] = useState([]);
-    const [commentState, setCommentState] = useState({});
     const [limitBlogs, setLimitBlogs] = useState([]);
     const [hasMore, setHasMore] = useState(true);
+
     const memoizedBlogs = useMemo(() => limitBlogs, [limitBlogs]);
-    const memoizedLastVisible = useMemo(() => lastVisible, [lastVisible]);
 
-
-
-
-    const handlelike = async (id) => {
-        setLoading(true);
+    // Fetch more blogs when "Load More" is clicked
+    const handleFetchMoreBlogs = async () => {
+        setBlogLoading(true);
         try {
-            await like(id, currentUser, memoizedBlogs, user, setUser, setLiked, setLimitBlogs)
+            await fetchMoreBlogs(
+                lastVisible,
+                totalBlogs,
+                limitBlogs,
+                setLimitBlogs,
+                setLastVisible,
+                setHasMore
+            );
         } catch (error) {
-            console.error("error", error)
-
+            console.error("Error fetching more blogs:", error);
         } finally {
-            setLoading(false);
-        }
-
-    }
-
-    const handleComments = async (e, id) => {
-        e.preventDefault();
-        setLoading(true);
-        try {
-            await comments(id, memoizedBlogs, currentUser, user, commentState, setCommentState)
-        } catch (error) {
-            console.error("Error adding comment:", error)
-        } finally {
-            setLoading(false);
-            fetchoneBlog(id, setLimitBlogs);
-
+            setBlogLoading(false);
         }
     };
 
-    const handleFetchMoreBlogs = () => {
-        setBlogLoading(true);
-
-        fetchMoreBlogs(memoizedLastVisible, totalBlogs, limitBlogs, setLimitBlogs, setBlogsLoaded, setLastVisible, setHasMore)
-        setBlogLoading(false);
-
-    }
-
-
+    // Handle search form submission
     const handleSearch = (e) => {
-        e.preventDefault(); // Fix typo
-        const query = searchRef.current.value.trim();
+        e.preventDefault();
+        const query = searchValue.trim();
         if (query) {
-            nav(`/blogs/${query}`);
+            navigate(`/blogs/${query}`);
         } else {
             console.log("Search query is empty");
         }
     };
 
-
+    // Fetch initial data
     useEffect(() => {
-        // Fetch user data and blogs count on initial load
-        fetchUser(currentUser.uid, setUser);
-        fetchTotalBlogsCount().then(count => setTotalBlogs(count));
+        const fetchInitialData = async () => {
+            try {
+                const count = await fetchTotalBlogsCount();
+                setTotalBlogs(count);
 
-        const fetchData = async () => {
-            const { data, lastVisibleDoc } = await fetchLimitData(3);
-            setLimitBlogs(data);
-            setLastVisible(lastVisibleDoc);
-            setHasMore(true)
+                const { data, lastVisibleDoc } = await fetchLimitData(3);
+                setLimitBlogs(data);
+                setLastVisible(lastVisibleDoc);
+                setHasMore(true);
+            } catch (error) {
+                console.error("Error fetching initial data:", error);
+            }
         };
-        fetchData();
-    }, [currentUser.uid]);
 
-    useEffect(() => {
-        if (user) {
-            setLiked(user.likedBlogs || []);
-        }
-    }, [user, blogsLoaded, totalBlogs]);
-
-
+        fetchInitialData();
+    }, [currentUser?.uid]); // Ensure `currentUser.uid` is included as a dependency
 
     return (
         <div className="md:flex-1 md:flex-col md:h-screen md:overflow-auto">
-            <div className="flex justify-center items-center my-8">
-                <form onSubmit={handleSearch} className="relative w-full max-w-lg">
-                    <input
-                        ref={searchRef}
-                        type="text"
-                        placeholder="Explore inspiring blogs..."
-                        className="w-full px-4 py-2 text-lg rounded-full border-2 border-transparent shadow-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
-                    />
-                    <button
-                        type="submit"
-                        className="absolute right-0 top-0 bottom-0 px-4 py-2 bg-gradient-to-r from-secondary to-green-500 text-white font-bold rounded-full hover:shadow-lg hover:from-green-500 hover:to-secondary transition-all duration-300"
-                    >
-                        🔍
-                    </button>
-                </form>
-            </div>
+            {/* Search Bar */}
+            {/* Search Bar */}
+            <Search
+                handleSearch={handleSearch}
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+            />
+            {/* Heading */}
             {memoizedBlogs.length === 0 ? (
                 <h1 className="text-lg md:text-3xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-secondary to-green-500 animate-pulse">
-                    No blogs found, but don`t stop exploring!
+                    No blogs found, but don’t stop exploring!
                 </h1>
             ) : (
                 <h1 className="text-lg mt-8 md:text-4xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-secondary to-green-500">
                     Discover the Latest Stories ✨
                 </h1>
             )}
+
+            {/* Blog List */}
             <div className="flex flex-col gap-12 md:px-8 py-12 md:p-12 md:mx-12">
                 {memoizedBlogs.map((blog) => (
-                    <div key={blog.id} className="  border-2 border-gray-600 bg-gray-800 shadow-2xl md:rounded-lg">
-                        <div className="flex justify-between items-center px-6 bg-gray-600">
-                            <div className="flex flex-row items-center gap-2  p-2 ">
-                                {blog.createdBy?.name ? <Link to={`/profile/${blog.createdBy?.userId}`} className="text-gray-100 text-sm md:text-base font-semibold flex  align-middle justify-center items-center gap-3 hover:underline transition-all duration-150 ease-in ">
-                                    <img
-                                        src={blog.createdBy?.photo || anonymous}
-                                        alt="photo"
-                                        className="w-10 h-10 rounded-full border-2 border-gray-300"
-                                    />
-                                    <p>{blog.createdBy?.name || 'Unknown User'}</p></Link> : <div className="text-gray-100 text-sm md:text-base font-semibold flex  align-middle justify-center items-center gap-3">
-                                    <img
-                                        src={blog.createdBy?.photo || anonymous}
-                                        alt="photo"
-                                        className="w-10 h-10 rounded-full border-2 border-gray-300"
-                                    />
-                                    <p>{blog.createdBy?.name || 'Unknown User'}</p></div>}
-                            </div>
-                            <p className="text-gray-200 text-sm md:text-base font-semibold">{blog.createdAt}</p>
-                        </div>
-                        <div className="relative  p-6 rounded-lg shadow-lg flex flex-col md:flex-row gap-8 md:gap-16">
-                            <div className="flex-1 flex md:gap-2  flex-col w-full ">
-                                <h1 className="text-lg md:text-2xl font-bold text-white mb-4">{blog.title}</h1>
-                                <img
-                                    src={blog.imageUrl}
-                                    alt="Blog visual"
-                                    className="rounded-md w-full h-64 object-cover"
-                                />
-                                <p className="text-sm md:text-base text-white font-medium mt-4 break-words">
-                                    {blog.bigDescription.substring(0, 250)}...
-                                </p>
-                                <div className="pt-4 my-3">
-                                    {blog.tags && blog.tags.map((b, index) => (
-                                        <div key={index} className="inline-block m-2 p-[2px] rounded-lg bg-gradient-to-r from-secondary to-green-500">
-                                            <span className="block px-3  py-1 text-white font-semibold rounded-lg bg-gray-800">{b}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                                <Link
-                                    className="mt-4 font-semibold text-base md:text-lg text-secondary hover:underline"
-                                    to={`/blog/${blog.id}`}
-                                >
-                                    Read More
-                                </Link>
-                            </div>
-                            <div className="flex flex-col justify-center gap-4 md:w-1/3 md:mb-20 ">
-                                <div className="flex items-center justify-between text-white">
-                                    <p>{blog.likes} Likes</p>
-                                    <button
-                                        onClick={() => handlelike(blog.id)}
-                                        disabled={loading}
-                                        className={`flex items-center gap-2 ${liked.includes(blog.id) ? "text-[#159cdf]" : "text-white"} 
-                                        hover:text-blue-500 focus:outline-none transition-colors duration-300`}
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill={`${liked.includes(blog.id) ? "#159cdf" : "none"}`} viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                                        </svg>
-                                        <span className="font-semibold">Like</span>
-                                    </button>
-                                </div>
-                                <div className="text-white">Comments: <span className="font-semibold">{blog.comments ? blog.comments.length : 0}</span></div>
-                                <div className="bg-gray-800 p-4 rounded-md shadow-inner max-h-40 overflow-y-auto mb-4">
-                                    {blog.comments && blog.comments.length > 0 ? (
-                                        blog.comments.map((comment, index) => (
-                                            <div key={index} className="flex items-start gap-4 p-3 bg-gray-700 rounded-lg mb-3 shadow-sm">
-                                                <img
-                                                    src={comment.picture || anonymous}
-                                                    alt="profile"
-                                                    className="w-10 h-10 rounded-full border-2 border-blue-500"
-                                                />
-                                                <div>
-                                                    {comment.userId ? <Link to={`/profile/${comment.userId}`} className="text-sm text-gray-300 font-semibold hover:underline">{comment.name}</Link> : <p className="text-sm text-gray-300 font-semibold ">{comment.name}</p>}
-
-                                                    <p className="text-sm text-gray-400 mt-1">{comment.content}</p>
-                                                </div>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <p className="text-sm text-gray-500 italic text-center">
-                                            No comments yet. Be the first to comment!
-                                        </p>
-                                    )}
-
-                                </div>
-                                <form className="flex items-center gap-4" onSubmit={(e) => handleComments(e, blog.id)}>
-                                    <textarea
-                                        className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                                        rows="1"
-                                        placeholder="Write your comment..."
-                                        value={commentState[blog.id] || ""}
-                                        onChange={(e) =>
-                                            setCommentState((prevState) => ({
-                                                ...prevState,
-                                                [blog.id]: e.target.value,
-                                            }))
-                                        }
-                                        required
-                                    ></textarea>
-                                    <button
-                                        type="submit"
-                                        disabled={loading}
-                                        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none transition-colors duration-300"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
-                                        </svg>
-                                    </button>
-                                </form>
-                            </div>
+                    <div key={blog.id} className="border-2 border-gray-600 bg-gray-800 shadow-2xl md:rounded-lg">
+                        <BlogHeader blog={blog} />
+                        <div className="relative p-6 rounded-lg shadow-lg flex flex-col md:flex-row gap-8 md:gap-16">
+                            {/* Right Side */}
+                            <OneBlog blog={blog} />
+                            {/* Left Side */}
+                            <LikeAndComments
+                                blog={blog}
+                                setLimitBlogs={setLimitBlogs}
+                                memoizedBlogs={memoizedBlogs}
+                            />
                         </div>
                     </div>
                 ))}
+
+                {/* Loading Spinner */}
                 {blogLoading ? (
                     <div className="text-center">
                         <motion.div
@@ -244,6 +120,7 @@ const AllBlogs = () => {
                         />
                     </div>
                 ) : hasMore ? (
+                    /* Load More Button */
                     <div className="text-center">
                         <button
                             onClick={handleFetchMoreBlogs}
@@ -253,10 +130,11 @@ const AllBlogs = () => {
                         </button>
                     </div>
                 ) : (
+                    /* No More Blogs Message */
                     <p className="text-white text-center mt-8">No more blogs to load</p>
                 )}
             </div>
-        </div >
+        </div>
     );
 };
 

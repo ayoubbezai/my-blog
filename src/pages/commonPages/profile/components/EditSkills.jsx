@@ -17,7 +17,7 @@ const EditSkills = ({ fetchUserData, userData }) => {
     const startEditing = () => {
         // Set skills when editing starts to ensure it's initialized
         setSkills(userData?.skillsList?.join(", ") || "");
-        setIsEditing(true);
+        setIsEditing(!isEditing);
     };
 
     const updateSkills = async (e) => {

@@ -165,7 +165,6 @@ export const fetchMoreBlogs = async (
   totalBlogs,
   limitBlogs,
   setLimitBlogs,
-  setBlogsLoaded,
   setLastVisible,
   setHasMore
 ) => {
@@ -176,7 +175,6 @@ export const fetchMoreBlogs = async (
 
   const blogNumber = data.length + limitBlogs.length;
 
-  setBlogsLoaded(blogNumber);
 
   if (blogNumber >= totalBlogs) {
     setHasMore(false);

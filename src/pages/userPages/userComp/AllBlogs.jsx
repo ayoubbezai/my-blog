@@ -1,9 +1,9 @@
 import { useAuth } from "../../../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
-import { getFirestore, doc, collection, updateDoc, query, limit, startAfter, getDocs, getDoc } from "firebase/firestore";
 import { useEffect, useState, useMemo, useRef } from "react";
 import anonymous from "../../../assets/anonymous.png";
 import { motion } from 'framer-motion';
+import { fetchUser, fetchTotalBlogsCount, like, comments, fetchLimitData, fetchMoreBlogs, fetchoneBlog } from "../../../utils/helpers"
 
 const AllBlogs = () => {
     const { currentUser } = useAuth();
@@ -22,156 +22,63 @@ const AllBlogs = () => {
     const memoizedBlogs = useMemo(() => limitBlogs, [limitBlogs]);
     const memoizedLastVisible = useMemo(() => lastVisible, [lastVisible]);
 
-    const db = getFirestore();
-    const collectionRef = collection(db, "blogs");
-    const collectionRef2 = collection(db, "users");
 
-    // Function to fetch the total blog count
-    const fetchTotalBlogsCount = async () => {
-        const snapshot = await getDocs(collectionRef);
-        return snapshot.size;
-    };
 
-    // Function to fetch limited data from a collection
-    const fetchLimitData = async (collectionName, limitCount, startDoc = null) => {
-        try {
-            const collectionRef3 = collection(db, collectionName);
-            let q = query(collectionRef3, limit(limitCount));
-            if (startDoc) {
-                q = query(q, startAfter(startDoc));
-            }
-            const querySnapshot = await getDocs(q);
-            const data = querySnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
 
-            const lastVisibleDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
-
-            return { data, lastVisibleDoc };
-        } catch (error) {
-            console.error("Error fetching limited data:", error);
-        }
-    };
-
-    // Function to fetch more blogs
-    const fetchMoreBlogs = async () => {
-        setBlogLoading(true);
-
-        const { data, lastVisibleDoc } = await fetchLimitData("blogs", 3, memoizedLastVisible);
-
-        setLimitBlogs(prevBlogs => [...prevBlogs, ...data]);
-
-        const blogNumber = data.length + limitBlogs.length;
-
-        setBlogsLoaded(blogNumber);
-
-        if (blogNumber >= totalBlogs) {
-            setHasMore(false)
-        } else {
-            setHasMore(true)
-        }
-
-        setLastVisible(lastVisibleDoc);
-
-        setBlogLoading(false);
-    };
-
-    // Function to fetch user data
-    const fetchUser = async (id) => {
-        try {
-            const userRef = doc(db, "users", id);
-            const userData = await getDoc(userRef);
-            setUser(userData.data());
-        } catch {
-            console.log("error");
-        }
-    };
-
-    // Function to fetch a specific blog data
-    const fetchoneBlog = async (id) => {
-        try {
-            const blogRef = doc(db, "blogs", id);
-            const blogSnapshot = await getDoc(blogRef);
-            if (blogSnapshot.exists()) {
-                const blogData = blogSnapshot.data();
-                setLimitBlogs(prevBlogs => {
-                    const updatedBlogs = prevBlogs.map(blog =>
-                        blog.id === id ? { ...blog, ...blogData } : blog
-                    );
-                    return updatedBlogs;
-                });
-            } else {
-                console.log("No such blog found!");
-            }
-        } catch (error) {
-            console.error("Error fetching the blog:", error);
-        }
-    };
-
-    // Function to handle liking a blog
-    const like = async (id) => {
+    const handlelike = async (id) => {
         setLoading(true);
-        const likedBlogs = user.likedBlogs;
-        const blog = memoizedBlogs.find((b) => b.id === id);
+        try {
+            await like(id, currentUser, memoizedBlogs, user, setUser, setLiked, setLimitBlogs)
+        } catch (error) {
+            console.error("error", error)
 
-        if (likedBlogs.includes(id)) {
-            await updateDoc(doc(collectionRef2, currentUser.uid), {
-                likedBlogs: likedBlogs.filter((b) => b !== id),
-            });
-            setLiked(likedBlogs.filter((b) => b !== id));
-            await updateDoc(doc(collectionRef, id), { likes: blog.likes - 1 });
-        } else {
-            await updateDoc(doc(collectionRef2, currentUser.uid), {
-                likedBlogs: [...likedBlogs, id],
-            });
-            setLiked([...likedBlogs, id]);
-            await updateDoc(doc(collectionRef, id), { likes: blog.likes + 1 });
+        } finally {
+            setLoading(false);
         }
-        fetchoneBlog(id);
-        fetchUser(currentUser.uid);
-        setLoading(false);
-    };
 
-    // Function to handle adding a comment
-    const comments = async (id, e) => {
+    }
+
+    const handleComments = async (e, id) => {
         e.preventDefault();
         setLoading(true);
-        const blog = memoizedBlogs.find((b) => b.id === id);
-        const prevComments = blog.comments || [];
-        const newComment = {
-            "name": user.name,
-            "content": commentState[id],
-            "picture": user.profile,
-            "userId": currentUser.uid
-        }
-
-        if (!newComment.content.trim()) {
-            setLoading(false);
-            return;
-        }
-
         try {
-            await updateDoc(doc(collectionRef, id), {
-                comments: [...prevComments, newComment],
-            });
+            await comments(id, memoizedBlogs, currentUser, user, commentState, setCommentState)
         } catch (error) {
-            console.log("Error updating comments:", error);
-        }
+            console.error("Error adding comment:", error)
+        } finally {
+            setLoading(false);
+            fetchoneBlog(id, setLimitBlogs);
 
-        setLoading(false);
-        fetchUser(currentUser.uid);
-        fetchoneBlog(id);
-        setCommentState(prevState => ({ ...prevState, [id]: "" }));
+        }
     };
+
+    const handleFetchMoreBlogs = () => {
+        setBlogLoading(true);
+
+        fetchMoreBlogs(memoizedLastVisible, totalBlogs, limitBlogs, setLimitBlogs, setBlogsLoaded, setLastVisible, setHasMore)
+        setBlogLoading(false);
+
+    }
+
+
+    const handleSearch = (e) => {
+        e.preventDefault(); // Fix typo
+        const query = searchRef.current.value.trim();
+        if (query) {
+            nav(`/blogs/${query}`);
+        } else {
+            console.log("Search query is empty");
+        }
+    };
+
 
     useEffect(() => {
         // Fetch user data and blogs count on initial load
-        fetchUser(currentUser.uid);
+        fetchUser(currentUser.uid, setUser);
         fetchTotalBlogsCount().then(count => setTotalBlogs(count));
 
         const fetchData = async () => {
-            const { data, lastVisibleDoc } = await fetchLimitData("blogs", 3);
+            const { data, lastVisibleDoc } = await fetchLimitData(3);
             setLimitBlogs(data);
             setLastVisible(lastVisibleDoc);
             setHasMore(true)
@@ -183,18 +90,8 @@ const AllBlogs = () => {
         if (user) {
             setLiked(user.likedBlogs || []);
         }
-
     }, [user, blogsLoaded, totalBlogs]);
 
-    const handleSearch = (e) => {
-        e.preventDefault(); // Fix typo
-        const query = searchRef.current.value.trim(); // Trim whitespace
-        if (query) {
-            nav(`/blogs/${query}`); // Ensure the route is correct
-        } else {
-            console.log("Search query is empty"); // Provide feedback if empty
-        }
-    };
 
 
     return (
@@ -274,7 +171,7 @@ const AllBlogs = () => {
                                 <div className="flex items-center justify-between text-white">
                                     <p>{blog.likes} Likes</p>
                                     <button
-                                        onClick={() => like(blog.id)}
+                                        onClick={() => handlelike(blog.id)}
                                         disabled={loading}
                                         className={`flex items-center gap-2 ${liked.includes(blog.id) ? "text-[#159cdf]" : "text-white"} 
                                         hover:text-blue-500 focus:outline-none transition-colors duration-300`}
@@ -309,7 +206,7 @@ const AllBlogs = () => {
                                     )}
 
                                 </div>
-                                <form className="flex items-center gap-4" onSubmit={(e) => comments(blog.id, e)}>
+                                <form className="flex items-center gap-4" onSubmit={(e) => handleComments(e, blog.id)}>
                                     <textarea
                                         className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                                         rows="1"
@@ -349,7 +246,7 @@ const AllBlogs = () => {
                 ) : hasMore ? (
                     <div className="text-center">
                         <button
-                            onClick={fetchMoreBlogs}
+                            onClick={handleFetchMoreBlogs}
                             className="text-white bg-blue-500 px-4 py-2 rounded-md mt-8 hover:bg-blue-600 focus:outline-none transition-colors duration-300"
                         >
                             Load More Blogs

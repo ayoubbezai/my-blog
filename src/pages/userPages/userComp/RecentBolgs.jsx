@@ -1,35 +1,18 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getFirestore, collection, getDocs, query, limit } from "firebase/firestore";
+import {  fetchLimitData } from "../../../utils/helpers";
 
-const db = getFirestore();
 
 const RecentBlogs = () => {
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Fetch limited blog data from Firestore
-    const fetchLimitedData = async (collectionName, limitCount) => {
-        try {
-            const collectionRef = collection(db, collectionName);
-            const q = query(collectionRef, limit(limitCount));
-            const querySnapshot = await getDocs(q);
-            const data = querySnapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-            return data;
-        } catch (error) {
-            console.error("Error fetching blogs:", error.message);
-            return [];
-        }
-    };
 
     // Fetch data on component mount
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const data = await fetchLimitedData("blogs", 4);
+            const { data } = await fetchLimitData( 4 ); //fetchlimitblogs
             setBlogs(data);
             setLoading(false);
         };

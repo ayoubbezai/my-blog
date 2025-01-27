@@ -10,7 +10,7 @@ const SearchBlog = () => {
     const { query: initialQuery } = useParams();
     const { blogs, getAllBlog } = useAuth();
     const [filtredBlogs, setFiltredBlogs] = useState([]);
-    const [searchValue, setSearchValue] = useState(""); // Controlled search value
+    const [searchValue, setSearchValue] = useState(""); 
 
     const navigate = useNavigate();
 
@@ -36,8 +36,8 @@ const SearchBlog = () => {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        navigate(`/blogs/${searchValue}`); // Navigate with updated search value
-        setFiltredBlogs(filterBlogs(blogs, searchValue)); // Filter blogs
+        navigate(`/blogs/${searchValue}`); 
+        setFiltredBlogs(filterBlogs(blogs, searchValue)); 
     };
 
     return (

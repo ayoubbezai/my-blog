@@ -1,6 +1,6 @@
 import { useAuth } from "../../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { fetchTotalBlogsCount, fetchLimitData, fetchMoreBlogs } from "../../../utils/helpers";
 import OneBlog from "./OneBlog";
@@ -11,7 +11,6 @@ import Search from "./Search";
 const AllBlogs = () => {
     const { currentUser } = useAuth();
     const navigate = useNavigate();
-    const searchRef = useRef(null); // Fixed: Added `searchRef` declaration
 
     const [searchValue, setSearchValue] = useState("");
     const [blogLoading, setBlogLoading] = useState(false);
@@ -94,11 +93,13 @@ const AllBlogs = () => {
             {/* Blog List */}
             <div className="flex flex-col gap-12 md:px-8 py-12 md:p-12 md:mx-12">
                 {memoizedBlogs.map((blog) => (
-                    <div key={blog.id} className="border-2 border-gray-600 bg-gray-800 shadow-2xl md:rounded-lg">
+                    <div key={blog.id} className="border-2 border-gray-600 bg-gray-800 shadow-2xl md:rounded-lg w-full lg:w-4/5 mx-auto">
                         <BlogHeader blog={blog} />
-                        <div className="relative p-6 rounded-lg shadow-lg flex flex-col md:flex-row gap-8 md:gap-16">
+                        <div className="relative p-6 rounded-lg shadow-lg flex flex-col lg:flex-row ">
                             {/* Right Side */}
-                            <OneBlog blog={blog} />
+                            <div className=" flex flex-col  lg:w-2/3  ">
+                                <OneBlog blog={blog} />
+                            </div>
                             {/* Left Side */}
                             <LikeAndComments
                                 blog={blog}

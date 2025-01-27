@@ -168,13 +168,11 @@ export const fetchMoreBlogs = async (
   setLastVisible,
   setHasMore
 ) => {
-
   const { data, lastVisibleDoc } = await fetchLimitData(3, memoizedLastVisible);
 
   setLimitBlogs((prevBlogs) => [...prevBlogs, ...data]);
 
   const blogNumber = data.length + limitBlogs.length;
-
 
   if (blogNumber >= totalBlogs) {
     setHasMore(false);
@@ -182,4 +180,21 @@ export const fetchMoreBlogs = async (
     setHasMore(true);
   }
   setLastVisible(lastVisibleDoc);
+};
+
+export const fetchBlogsByIds = async (ids ) => {
+
+  try {
+    const blogPromises = ids
+      .map((id) => getDoc(doc(db, "blogs", id)));
+    const blogSnapshots = await Promise.all(blogPromises);
+
+    // Filter out any undefined blogs or invalid IDs
+    const blogs = blogSnapshots
+      .filter((snapshot) => snapshot.exists()) // Ensure the document exists
+      .map((snapshot) => ({ id: snapshot.id, ...snapshot.data() })); // Convert snapshot to data
+    return blogs;
+  } catch (error) {
+    console.error("Error fetching blogs by IDs:", error);
+  }
 };

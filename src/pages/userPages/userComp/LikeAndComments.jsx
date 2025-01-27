@@ -50,7 +50,7 @@ const LikeAndComments = ({ blog, setLimitBlogs, memoizedBlogs }) => {
         }
     }, [user]);
     return (
-        <div className="flex flex-col justify-center gap-4 md:w-1/3 md:mb-20 ">
+        <div className="flex flex-col self-start mt-8 justify-center gap-4 w-full lg:w-2/5">
             <div className="flex items-center justify-between text-white">
                 <p>{blog.likes} Likes</p>
                 <button
@@ -66,10 +66,10 @@ const LikeAndComments = ({ blog, setLimitBlogs, memoizedBlogs }) => {
                 </button>
             </div>
             <div className="text-white">Comments: <span className="font-semibold">{blog.comments ? blog.comments.length : 0}</span></div>
-            <div className="bg-gray-800 p-4 rounded-md shadow-inner max-h-40 overflow-y-auto mb-4">
+            <div className="bg-gray-800 pr-2 rounded-md shadow-inner max-h-48 overflow-y-auto ">
                 {blog.comments && blog.comments.length > 0 ? (
                     blog.comments.map((comment, index) => (
-                        <div key={index} className="flex items-start gap-4 p-3 bg-gray-700 rounded-lg mb-3 shadow-sm">
+                        <div key={index} className="flex items-start gap-4 p-2 bg-gray-700 rounded-lg mb-3 shadow-sm">
                             <img
                                 src={comment.picture || anonymous}
                                 alt="profile"
@@ -91,9 +91,9 @@ const LikeAndComments = ({ blog, setLimitBlogs, memoizedBlogs }) => {
             </div>
             <form className="flex items-center gap-4" onSubmit={(e) => handleComments(e, blog.id)}>
                 <textarea
-                    className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                    className="w-full p-2 text-xs md:text-sm  border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                     rows="1"
-                    placeholder="Write your comment..."
+                    placeholder="Write comment..."
                     value={commentState[blog.id] || ""}
                     onChange={(e) =>
                         setCommentState((prevState) => ({

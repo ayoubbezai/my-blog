@@ -1,31 +1,31 @@
 import { Link } from "react-router-dom"
 const OneBlog = ({ blog }) => {
     return (
-        <div className="flex-1 flex md:gap-2  flex-col w-full ">
-            <h1 className="text-lg md:text-2xl font-bold text-white mb-4">{blog.title}</h1>
+        <>
+            <h1 className="text-base md:text-xl font-bold text-white mb-2">{blog.title}</h1>
             <img
                 src={blog.imageUrl}
                 alt="Blog visual"
-                className="rounded-md w-full h-64 object-cover"
+                className="rounded-md lg:w-4/5 h-52 object-cover"
             />
-            <p className="text-sm md:text-base text-white font-medium mt-4 break-words">
-                {blog.bigDescription.substring(0, 250)}...
+            <p className="text-xs md:text-sm font-medium leading-5 text-white lg:w-4/5  mt-4 break-words">
+                {blog.bigDescription.substring(0, 200)}...
             </p>
-            <div className="pt-4 my-3">
+            <div className="pt-2 my-2">
                 {blog.tags && blog.tags.map((b, index) => (
-                    <div key={index} className="inline-block m-2 p-[2px] rounded-lg bg-gradient-to-r from-secondary to-green-500">
-                        <span className="block px-3  py-1 text-white font-semibold rounded-lg bg-gray-800">{b}</span>
+                    <div key={index} className="inline-block m-1 p-[1px] rounded-lg bg-gradient-to-r from-secondary to-green-500">
+                        <span className="block px-2  py-1 text-xs md:text-sm  text-white font-medium rounded-lg bg-gray-800">{b}</span>
                     </div>
                 ))}
             </div>
 
             <Link
-                className="mt-4 font-semibold text-base md:text-lg text-secondary hover:underline"
+                className="mt-4 font-medium text-sm md:text-base text-secondary hover:underline"
                 to={`/blog/${blog.id}`}
             >
                 Read More
             </Link>
-        </div>)
+        </>)
 }
 
 export default OneBlog

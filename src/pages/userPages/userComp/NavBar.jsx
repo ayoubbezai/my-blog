@@ -58,8 +58,15 @@ const NavBar = ({ hoverd }) => {
             Liked Blogs
           </Link>
           <Link
-            to="/profile"
+            to="/myblogs"
             className={`text-base font-bold text-center hover:text-secondary ${hoverd === 4 ? "text-secondary" : ""
+              }`}
+          >
+            My Blogs
+          </Link>
+          <Link
+            to="/profile"
+            className={`text-base font-bold text-center hover:text-secondary ${hoverd === 5 ? "text-secondary" : ""
               }`}
           >
             Profile
@@ -113,8 +120,15 @@ const NavBar = ({ hoverd }) => {
           Liked Blogs
         </Link>
         <Link
-          to="/profile"
+          to="/myblogs"
           className={`text-sm font-bold text-center hover:text-secondary ${hoverd === 4 ? "text-secondary" : ""
+            }`}
+        >
+          My Blogs
+        </Link>
+        <Link
+          to="/profile"
+          className={`text-sm font-bold text-center hover:text-secondary ${hoverd === 5 ? "text-secondary" : ""
             }`}
         >
           Profile

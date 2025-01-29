@@ -13,6 +13,7 @@ import Profile from "./pages/commonPages/profile/Profile";
 import OtherProfile from "./pages/commonPages/profile/OtherProfile";
 import BlogDetails from "./pages/userPages/blogDetails/BlogDetails"
 import LikedBlogs from "./pages/userPages/likedBlogs/LikedBlogs"
+import MyBlogs from "./pages/userPages/MyBlogs/MyBlogs"
 import SearchBlog from "./pages/userPages/searchedBlogs/SearchBlog";
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/blogs/:query" element={<SearchBlog />} />
             <Route path="/likedblogs" element={<LikedBlogs />} />
+            <Route path="/myblogs" element={<MyBlogs />} />
             <Route path="/blog/:id" element={<BlogDetails />} />
 
           </Route>

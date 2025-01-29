@@ -8,7 +8,7 @@ import LikeAndComments from "./LikeAndComments";
 import BlogHeader from "./BlogHeader";
 import Search from "./Search";
 import { createPortal } from 'react-dom';
-import { AddBlog } from "../../adminPages/adminComp/AddBlog"
+import AddBlog from "../../adminPages/adminComp/AddBlog"
 
 const AllBlogs = () => {
     const { currentUser } = useAuth();
@@ -81,19 +81,20 @@ const AllBlogs = () => {
                     Add Blog
                 </button>
             </div>
-            <AddBlog />
 
 
             {isOpen && createPortal(
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-white w-2/3 h-2/3 p-6 rounded-lg shadow-lg relative">
-                        <button
-                            className="absolute top-2 right-2 text-gray-600"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            ✖
-                        </button>
-                        <h2 className="text-xl font-bold">Add a New Blog</h2>
+                <div className="fixed inset-0 flex my-4 h-full   justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white w-2/3  p-6 pb-0 overflow-auto rounded-lg shadow-lg relative">
+                        <div className="flex justify-between items-center">
+                            <h2 className="text-xl font-bold">Add a New Blog</h2>
+                            <button
+                                className=" "
+                                onClick={() => setIsOpen(false)}
+                            >
+                                ✖
+                            </button>
+                        </div>
                         <AddBlog />
                     </div>
                 </div>,

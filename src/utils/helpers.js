@@ -182,11 +182,9 @@ export const fetchMoreBlogs = async (
   setLastVisible(lastVisibleDoc);
 };
 
-export const fetchBlogsByIds = async (ids ) => {
-
+export const fetchBlogsByIds = async (ids, colloctionName) => {
   try {
-    const blogPromises = ids
-      .map((id) => getDoc(doc(db, "blogs", id)));
+    const blogPromises = ids.map((id) => getDoc(doc(db, colloctionName, id)));
     const blogSnapshots = await Promise.all(blogPromises);
 
     // Filter out any undefined blogs or invalid IDs

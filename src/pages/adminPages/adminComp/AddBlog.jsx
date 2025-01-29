@@ -1,4 +1,4 @@
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { useRef } from "react";
 import { addDoc, collection } from "firebase/firestore";
 import { useAuth } from "../../../context/AuthContext";
@@ -17,6 +17,7 @@ const AddBlog = () => {
 
     const db = getFirestore();
     const data = collection(db, "blogs");
+    const data2 = collection(db, "newBlogs");
 
     const addBlog = async () => {
         const dataImage = new FormData();
@@ -47,8 +48,6 @@ const AddBlog = () => {
 
             const tags = tagRef.current.value.split(",");
 
-            console.log(isUnknown)
-
             const blogdata = {
                 "title": titleRef.current.value,
                 "bigDescription": bigDescRef.current.value,
@@ -63,7 +62,25 @@ const AddBlog = () => {
                 "tags": tags,
             };
 
-            await addDoc(data, blogdata);
+            const blogdata2 = {
+                ...blogdata,
+                "status": "pending"
+            };
+
+            let docRef;
+            if (userData.role === "admin") {
+                docRef = await addDoc(data, blogdata);
+            } else {
+                docRef = await addDoc(data2, blogdata2);
+            }
+
+            if (!isUnknown && currentUser?.uid) {
+                const userRef = doc(db, "users", currentUser.uid);
+                await updateDoc(userRef, {
+                    myBlogs: arrayUnion(docRef.id)
+                });
+            }
+
             titleRef.current.value = "";
             bigDescRef.current.value = "";
             setUrl("");

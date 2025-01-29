@@ -68,3 +68,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+#root{
+  position: relative;
+}

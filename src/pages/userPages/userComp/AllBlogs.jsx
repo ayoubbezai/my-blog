@@ -7,6 +7,8 @@ import OneBlog from "./OneBlog";
 import LikeAndComments from "./LikeAndComments";
 import BlogHeader from "./BlogHeader";
 import Search from "./Search";
+import { createPortal } from 'react-dom';
+import { AddBlog } from "../../adminPages/adminComp/AddBlog"
 
 const AllBlogs = () => {
     const { currentUser } = useAuth();
@@ -18,10 +20,10 @@ const AllBlogs = () => {
     const [lastVisible, setLastVisible] = useState(null);
     const [limitBlogs, setLimitBlogs] = useState([]);
     const [hasMore, setHasMore] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
 
     const memoizedBlogs = useMemo(() => limitBlogs, [limitBlogs]);
 
-    // Fetch more blogs when "Load More" is clicked
     const handleFetchMoreBlogs = async () => {
         setBlogLoading(true);
         try {
@@ -40,7 +42,6 @@ const AllBlogs = () => {
         }
     };
 
-    // Handle search form submission
     const handleSearch = (e) => {
         e.preventDefault();
         const query = searchValue.trim();
@@ -51,13 +52,11 @@ const AllBlogs = () => {
         }
     };
 
-    // Fetch initial data
     useEffect(() => {
         const fetchInitialData = async () => {
             try {
                 const count = await fetchTotalBlogsCount();
                 setTotalBlogs(count);
-
                 const { data, lastVisibleDoc } = await fetchLimitData(3);
                 setLimitBlogs(data);
                 setLastVisible(lastVisibleDoc);
@@ -66,20 +65,41 @@ const AllBlogs = () => {
                 console.error("Error fetching initial data:", error);
             }
         };
-
         fetchInitialData();
-    }, [currentUser?.uid]); // Ensure `currentUser.uid` is included as a dependency
+    }, [currentUser?.uid]);
 
     return (
-        <div className="md:flex-1 md:flex-col md:h-screen md:overflow-auto">
-            {/* Search Bar */}
-            {/* Search Bar */}
-            <Search
-                handleSearch={handleSearch}
-                searchValue={searchValue}
-                setSearchValue={setSearchValue}
-            />
-            {/* Heading */}
+        <div className={`md:flex-1 relative md:flex-col md:h-screen md:overflow-auto ${isOpen ? 'overflow-hidden' : ''}`}>
+
+            <div className="flex justify-evenly items-center">
+                <Search handleSearch={handleSearch} searchValue={searchValue} setSearchValue={setSearchValue} />
+
+                <button
+                    className="text-white font-semibold rounded-lg shadow-lg p-2 mr-8 bg-gradient-to-r from-secondary to-green-500"
+                    onClick={() => setIsOpen(true)}
+                >
+                    Add Blog
+                </button>
+            </div>
+            <AddBlog />
+
+
+            {isOpen && createPortal(
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white w-2/3 h-2/3 p-6 rounded-lg shadow-lg relative">
+                        <button
+                            className="absolute top-2 right-2 text-gray-600"
+                            onClick={() => setIsOpen(false)}
+                        >
+                            ✖
+                        </button>
+                        <h2 className="text-xl font-bold">Add a New Blog</h2>
+                        <AddBlog />
+                    </div>
+                </div>,
+                document.body
+            )}
+
             {memoizedBlogs.length === 0 ? (
                 <h1 className="text-lg md:text-3xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-secondary to-green-500 animate-pulse">
                     No blogs found, but don’t stop exploring!
@@ -90,27 +110,19 @@ const AllBlogs = () => {
                 </h1>
             )}
 
-            {/* Blog List */}
             <div className="flex flex-col gap-12 md:px-8 py-12 md:p-12 md:mx-12">
                 {memoizedBlogs.map((blog) => (
                     <div key={blog.id} className="border-2 border-gray-600 bg-gray-800 shadow-2xl md:rounded-lg w-full lg:w-4/5 mx-auto">
                         <BlogHeader blog={blog} />
-                        <div className="relative p-6 rounded-lg shadow-lg flex flex-col lg:flex-row ">
-                            {/* Right Side */}
-                            <div className=" flex flex-col  lg:w-2/3  ">
+                        <div className="relative p-6 rounded-lg shadow-lg flex flex-col lg:flex-row">
+                            <div className="flex flex-col lg:w-2/3">
                                 <OneBlog blog={blog} />
                             </div>
-                            {/* Left Side */}
-                            <LikeAndComments
-                                blog={blog}
-                                setLimitBlogs={setLimitBlogs}
-                                memoizedBlogs={memoizedBlogs}
-                            />
+                            <LikeAndComments blog={blog} setLimitBlogs={setLimitBlogs} memoizedBlogs={memoizedBlogs} />
                         </div>
                     </div>
                 ))}
 
-                {/* Loading Spinner */}
                 {blogLoading ? (
                     <div className="text-center">
                         <motion.div
@@ -121,7 +133,6 @@ const AllBlogs = () => {
                         />
                     </div>
                 ) : hasMore ? (
-                    /* Load More Button */
                     <div className="text-center">
                         <button
                             onClick={handleFetchMoreBlogs}
@@ -131,7 +142,6 @@ const AllBlogs = () => {
                         </button>
                     </div>
                 ) : (
-                    /* No More Blogs Message */
                     <p className="text-white text-center mt-8">No more blogs to load</p>
                 )}
             </div>

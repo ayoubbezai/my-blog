@@ -1,6 +1,6 @@
 const Search = ({ handleSearch, searchValue, setSearchValue }) => {
     return (
-        <div className="flex justify-center items-center my-8">
+        <div className="flex justify-center items-center my-8 flex-1">
             <form onSubmit={handleSearch} className="relative w-full max-w-lg">
                 <input
                     type="text"

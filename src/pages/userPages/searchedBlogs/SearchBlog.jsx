@@ -10,7 +10,7 @@ const SearchBlog = () => {
     const { query: initialQuery } = useParams();
     const { blogs, getAllBlog } = useAuth();
     const [filtredBlogs, setFiltredBlogs] = useState([]);
-    const [searchValue, setSearchValue] = useState(""); 
+    const [searchValue, setSearchValue] = useState("");
 
     const navigate = useNavigate();
 
@@ -36,12 +36,12 @@ const SearchBlog = () => {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        navigate(`/blogs/${searchValue}`); 
-        setFiltredBlogs(filterBlogs(blogs, searchValue)); 
+        navigate(`/blogs/${searchValue}`);
+        setFiltredBlogs(filterBlogs(blogs, searchValue));
     };
 
     return (
-        <div className="flex flex-col md:flex-row min-h-screen bg-primary">
+        <div className="flex flex-col  md:flex-row min-h-screen bg-primary">
             <NavBar />
             <div className="flex-1 md:px-16 bg-primary shadow-lg md:h-screen md:overflow-y-auto">
                 {/* Search Bar */}

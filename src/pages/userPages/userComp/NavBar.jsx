@@ -60,7 +60,7 @@ const NavBar = ({ hoverd }) => {
 
           <Link
             to="/myblogs"
-            className={`text-base font-bold text-center hover:text-secondary ${hoverd === 3 ? "text-secondary" : ""
+            className={`text-base font-bold text-center hover:text-secondary ${hoverd === 4 ? "text-secondary" : ""
               }`}
           >
             My Blogs
@@ -68,7 +68,7 @@ const NavBar = ({ hoverd }) => {
 
           <Link
             to="/profile"
-            className={`text-base font-bold text-center hover:text-secondary ${hoverd === 4 ? "text-secondary" : ""
+            className={`text-base font-bold text-center hover:text-secondary ${hoverd === 5 ? "text-secondary" : ""
               }`}
           >
             Profile

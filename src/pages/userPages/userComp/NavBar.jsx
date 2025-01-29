@@ -99,7 +99,7 @@ const NavBar = ({ hoverd }) => {
       </div>
 
 
-      {menuOpen && < div className="flex justify-between items-center w-full " >
+      {menuOpen && < div className="flex lg:hidden justify-between items-center w-full " >
         <Link
           to="/dashboard"
           className={`text-sm font-bold text-center hover:text-secondary ${hoverd === 1 ? "text-secondary" : ""

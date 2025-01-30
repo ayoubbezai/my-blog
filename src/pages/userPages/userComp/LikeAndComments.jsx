@@ -46,13 +46,26 @@ const LikeAndComments = ({ blog, setLimitBlogs, limitBlogs }) => {
     };
 
 
-    useEffect(() => {
-        fetchUser(currentUser.uid, setUser);
 
-        if (user) {
-            setLiked(user.likedBlogs || []);
-        }
-    }, [user]);
+    useEffect(() => {
+        const loadUser = async () => {
+            if (currentUser?.uid) {
+                try {
+                    const userData = await fetchUser(currentUser.uid); // Fetch user data
+                    if (userData) {
+                        setUser(userData); // Set user state
+                    }
+                    if (user) {
+                        setLiked(userData.likedBlogs || []);
+                    }
+                } catch (error) {
+                    console.error("Error fetching user:", error);
+                }
+            }
+        };
+
+        loadUser();
+    }, [currentUser, blog]);
 
     useEffect(() => {
         const handleOutsideClick = (event) => {

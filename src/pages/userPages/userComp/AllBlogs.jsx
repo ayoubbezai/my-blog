@@ -96,7 +96,7 @@ const AllBlogs = () => {
 
             {isOpen && createPortal(
                 <div className="fixed inset-0 flex   justify-center bg-black bg-opacity-50 z-50">
-                    <div ref={modalRef} className="bg-white overflow-auto w-2/3 p-6 pb-0 rounded-lg shadow-lg relative">
+                    <div ref={modalRef} className="bg-white overflow-auto w-[90%] my-2 md:w-2/3 p-6 pb-0 rounded-lg shadow-lg relative">
                         <div className="flex justify-between items-center">
                             <h2 className="text-xl font-bold">Add a New Blog</h2>
                             <Button onClick={() => setIsOpen(false)} className="text-xl">X</Button>

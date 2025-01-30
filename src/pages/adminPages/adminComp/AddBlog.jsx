@@ -106,7 +106,7 @@ const AddBlog = () => {
     return (
         <div className="flex flex-col justify-start my-10 mb-26 items-center gap-4">
             <h1 className="text-4xl font-bold text-center text-secondary">Add Blog</h1>
-            <form className="flex flex-col gap-4 p-4 rounded-md w-1/2" onSubmit={handleSubmit}>
+            <form className="flex flex-col gap-4 p-4 rounded-md w-full md:w-1/2" onSubmit={handleSubmit}>
                 <input
                     type="text"
                     placeholder="Title"

@@ -122,7 +122,7 @@ const LikeAndComments = ({ blog, setLimitBlogs, limitBlogs }) => {
                     {blog.comments && blog.comments.length > 4 && (<button onClick={() => setIsOpen(true)} className=" self-center w-full  text-center text-white text-sm font-medium">See all Comments</button>)}
                     {isOpen && createPortal(
                         <div className="fixed inset-0 flex   justify-center bg-black bg-opacity-50 z-50">
-                            <div ref={modalRef} className="bg-white overflow-auto w-[90%] my-2 md:w-1/2 p-6 pb-0 rounded-lg shadow-lg relative">
+                            <div ref={modalRef} className="bg-white overflow-auto w-[90%] my-2 md:w-1/2  p-6 pb-0 rounded-lg shadow-lg relative">
                                 <div className="flex justify-between items-center">
                                     <h2 className="text-xl font-bold">All comments</h2>
                                     <button onClick={() => setIsOpen(false)} className="text-xl">X</button>

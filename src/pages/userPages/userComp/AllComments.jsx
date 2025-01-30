@@ -69,8 +69,8 @@ const AllComments = ({ blog }) => {
     };
 
     return (
-        <div>
-            <div className="mt-4 max-h-80  md:max-h-96 overflow-auto  bg-gray-100 p-4 rounded-lg shadow-md">
+        <div className="h-[50%]">
+            <div className="mt-4   md:max-h-96 overflow-auto  bg-gray-100 p-4 rounded-lg shadow-md">
                 <h2 className="text-lg font-semibold mb-3">
                     Comments ({blogDetails.comments?.length || 0})
                 </h2>

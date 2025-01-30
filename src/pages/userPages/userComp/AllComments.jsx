@@ -8,7 +8,7 @@ import { fetchUser } from "@/utils/helpers";
 const db = getFirestore();
 
 const AllComments = ({ blog }) => {
-    const [visibleCount, setVisibleCount] = useState(3);
+    const [visibleCount, setVisibleCount] = useState(4);
     const [loading, setLoading] = useState(false);
     const [commentState, setCommentState] = useState("");
     const [user, setUser] = useState(null);

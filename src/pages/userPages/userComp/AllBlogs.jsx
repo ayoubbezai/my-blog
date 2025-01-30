@@ -125,7 +125,7 @@ const AllBlogs = () => {
                             <div className="flex flex-col lg:w-2/3">
                                 <OneBlog blog={blog} />
                             </div>
-                            <LikeAndComments blog={blog} setLimitBlogs={setLimitBlogs} />
+                            <LikeAndComments blog={blog} setLimitBlogs={setLimitBlogs} limitBlogs={limitBlogs}/>
                         </div>
                     </div>
                 ))}

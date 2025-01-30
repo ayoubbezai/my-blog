@@ -21,13 +21,21 @@ export const fetchTotalBlogsCount = async () => {
 };
 
 // Function to fetch user data
-export const fetchUser = async (id, setUser) => {
+export const fetchUser = async (id) => {
   try {
     const userRef = doc(db, "users", id);
     const userData = await getDoc(userRef);
-    setUser(userData.data());
-  } catch {
-    console.log("error");
+
+    // Check if the document exists and return the data
+    if (userData.exists()) {
+      return userData.data(); // Return the user data
+    } else {
+      console.log("User data not found");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return null;
   }
 };
 
@@ -36,13 +44,17 @@ export const fetchoneBlog = async (id, setLimitBlogs) => {
   try {
     const blogRef = doc(db, "blogs", id);
     const blogSnapshot = await getDoc(blogRef);
+
     if (blogSnapshot.exists()) {
       const blogData = blogSnapshot.data();
+
       setLimitBlogs((prevBlogs) => {
-        const updatedBlogs = prevBlogs.map((blog) =>
+        if (!Array.isArray(prevBlogs)) {
+          return [{ id, ...blogData }]; // Convert to array if it's not one
+        }
+        return prevBlogs.map((blog) =>
           blog.id === id ? { ...blog, ...blogData } : blog
         );
-        return updatedBlogs;
       });
     } else {
       console.log("No such blog found!");

@@ -15,6 +15,7 @@ import BlogDetails from "./pages/userPages/blogDetails/BlogDetails"
 import LikedBlogs from "./pages/userPages/likedBlogs/LikedBlogs"
 import MyBlogs from "./pages/userPages/MyBlogs/MyBlogs"
 import SearchBlog from "./pages/userPages/searchedBlogs/SearchBlog";
+import UsersMangment from "./pages/adminPages/usersList/UsersMangment";
 
 function App() {
   return (
@@ -30,8 +31,6 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/profile/:profile" element={<OtherProfile />} />
 
-
-
           </Route>
           <Route element={<ProtectedRouteUser />}>
             <Route path="/blogs" element={<Blogs />} />
@@ -43,6 +42,7 @@ function App() {
           </Route>
           <Route element={<ProtectedRouteAdmin />}>
             <Route path="/blogsedit" element={<BlogsEdit />} />
+            <Route path="/users" element={<UsersMangment />} />
 
           </Route>
 

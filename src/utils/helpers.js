@@ -8,6 +8,7 @@ import {
   startAfter,
   getDocs,
   getDoc,
+  deleteDoc,
 } from "firebase/firestore";
 
 const db = getFirestore();
@@ -207,4 +208,19 @@ export const fetchBlogsByIds = async (ids, colloctionName) => {
   } catch (error) {
     console.error("Error fetching blogs by IDs:", error);
   }
+};
+
+//admin
+
+export const removeUser = async (userId) => {
+  const db = getFirestore();
+  const userDoc = doc(db, "users", userId);
+  await deleteDoc(userDoc); // Deletes the user document
+};
+
+// Function to change the role of a user
+export const changeUserRole = async (userId, newRole) => {
+  const db = getFirestore();
+  const userDoc = doc(db, "users", userId);
+  await updateDoc(userDoc, { role: newRole }); // Updates the user's role field
 };

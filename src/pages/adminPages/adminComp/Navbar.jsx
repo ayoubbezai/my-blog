@@ -27,15 +27,15 @@ const NavBar = ({ hoverd }) => {
 
 
     return (
-        <div className="flex  md:flex-row bg-primary/90 text-white justify-between  items-center p-4 px-12">
-            <div className={`flex items-center gap-2 ${menuOpen && "hidden"}`}>
+        <div className="flex  md:flex-col bg-black text-white justify-between  items-center p-4  md:px-20 ">
+            <div className={`flex items-center gap-2 ${menuOpen && "hidden md:flex"}`}>
                 <h1 className="text-2xl font-bold text-secondary tracking-widest uppercase">BLOG</h1>
             </div>
 
 
 
-            <div className={`md:flex items-center gap-6 ml-12 hidden `}>
-                <ul className="flex items-center gap-6">
+            <div className={`md:flex items-center gap-6 ml-12 md:ml-0 hidden `}>
+                <ul className="flex md:flex-col items-center gap-6">
                     <Link
                         to="/dashboard"
                         className={`text-base font-bold text-center hover:text-secondary ${hoverd === 1 ? "text-secondary" : ""
@@ -48,11 +48,24 @@ const NavBar = ({ hoverd }) => {
                         className={`text-base font-bold text-center hover:text-secondary ${hoverd === 2 ? "text-secondary" : ""
                             }`}
                     >
-                        Blogs Edit
+                        Edit Blogs
+
                     </Link>
                     <Link
+                        to="/users"
+                        className={`text-base font-bold text-center hover:text-secondary ${hoverd === 2 ? "text-secondary" : ""
+                            }`}
+                    >
+                        Users List
+
+                    </Link>
+                    
+
+                    
+
+                    <Link
                         to="/profile"
-                        className={`text-base font-bold text-center hover:text-secondary ${hoverd === 3 ? "text-secondary" : ""
+                        className={`text-base font-bold text-center hover:text-secondary ${hoverd === 5 ? "text-secondary" : ""
                             }`}
                     >
                         Profile
@@ -60,11 +73,11 @@ const NavBar = ({ hoverd }) => {
                 </ul>
             </div>
 
-            <div className={`flex items-center gap-2 flex-row ${menuOpen && "hidden"}`}>
+            <div className={`flex md:flex-col  items-center gap-2 md:gap-3 ${menuOpen && "hidden md:flex"}`}>
 
                 {userData.profile ? <img src={userData.profile} alt="profile" className="max-w-12 max-h-12 rounded-full aspect-square" /> : <p className="text-xl font-bold text-center bg-white rounded-full w-10 h-10 flex items-center justify-center text-primary mr-4"> {abvName} </p>}
 
-                <div className="flex flex-col">
+                <div className="flex flex-col md:gap-3  items-center ">
                     <p className="text-sm font-bold text-center">{userData.name}</p>
                     <button
                         onClick={handleLogout}
@@ -74,33 +87,47 @@ const NavBar = ({ hoverd }) => {
                     </button>
                 </div>
             </div>
-            <div className="md:hidden flex items-center ">
+            {!menuOpen && <div className="md:hidden flex items-center  ">
                 <button
                     onClick={() => setMenuOpen(!menuOpen)}
                     className="text-2xl text-white focus:outline-none"
-                >{menuOpen ? <span className="text-3xl mr-4">&times; </span> : <span>&#9776;</span>}
+                > <span>&#9776;</span>
                 </button>
-            </div>
+            </div>}
 
 
-            {menuOpen && < div className="flex justify-between items-center w-full " >
+            {menuOpen && < div className="flex flex-col   bg-black gap-8 md:hidden justify-between items-center w-full " >
+                <button
+                    onClick={() => setMenuOpen(!menuOpen)}
+                    className="text-2xl text-white focus:outline-none"
+                ><span className="text-3xl mr-4">&times; </span>
+                </button>
                 <Link
                     to="/dashboard"
-                    className={`text-base font-bold text-center hover:text-secondary ${hoverd === 1 ? "text-secondary" : ""
+                    className={`text-sm font-bold text-center hover:text-secondary ${hoverd === 1 ? "text-secondary" : ""
                         }`}
                 >
                     Dashboard
                 </Link>
                 <Link
                     to="/blogsedit"
-                    className={`text-base font-bold text-center hover:text-secondary ${hoverd === 2 ? "text-secondary" : ""
+                    className={`text-sm font-bold text-center hover:text-secondary ${hoverd === 2 ? "text-secondary" : ""
                         }`}
                 >
-                    Blogs Edit
+                    Edit Blogs
                 </Link>
                 <Link
+                    to="/users"
+                    className={`text-sm font-bold text-center hover:text-secondary ${hoverd === 2 ? "text-secondary" : ""
+                        }`}
+                >
+                    Users List
+                </Link>
+
+                
+                <Link
                     to="/profile"
-                    className={`text-base font-bold text-center hover:text-secondary ${hoverd === 3 ? "text-secondary" : ""
+                    className={`text-sm font-bold text-center hover:text-secondary ${hoverd === 5 ? "text-secondary" : ""
                         }`}
                 >
                     Profile

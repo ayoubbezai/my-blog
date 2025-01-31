@@ -8,7 +8,7 @@ const OneBlog = ({ blog }) => {
                 alt="Blog visual"
                 className="rounded-md lg:w-4/5 h-52 object-cover"
             />
-            <p className="text-xs md:text-sm font-medium leading-5 text-white lg:w-4/5  mt-4 break-words">
+            <p className="text-xs md:text-sm font-medium leading-5 text-white w-4/5  mt-4 break-words">
                 {blog.bigDescription.substring(0, 200)}...
             </p>
             <div className="pt-2 my-2">

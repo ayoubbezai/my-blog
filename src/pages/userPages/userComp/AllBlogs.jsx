@@ -83,11 +83,11 @@ const AllBlogs = () => {
     }, [isOpen]);
 
     return (
-        <div className={`md:flex-1 relative md:flex-col md:h-screen md:overflow-auto ${isOpen ? 'overflow-hidden' : ''}`}>
+        <div className={`md:flex-1  relative  md:h-screen md:overflow-auto ${isOpen ? 'overflow-hidden' : ''}`}>
 
-            <div className="flex justify-evenly items-center">
+            <div className="flex flex-col lg:flex-row lg:items-center gap-3 justify-center w-2/3 mx-auto ">
                 <Search handleSearch={handleSearch} searchValue={searchValue} setSearchValue={setSearchValue} />
-                <Button onClick={() => setIsOpen(true)} className="mr-8">Add Blog</Button>
+                <Button onClick={() => setIsOpen(true)} className="lg:mr-8 w-1/2 lg:w-32 mx-auto">Add Blog</Button>
             </div>
 
             {errorMessage && (
@@ -125,7 +125,7 @@ const AllBlogs = () => {
                             <div className="flex flex-col lg:w-2/3">
                                 <OneBlog blog={blog} />
                             </div>
-                            <LikeAndComments blog={blog} setLimitBlogs={setLimitBlogs} limitBlogs={limitBlogs}/>
+                            <LikeAndComments blog={blog} setLimitBlogs={setLimitBlogs} limitBlogs={limitBlogs} />
                         </div>
                     </div>
                 ))}

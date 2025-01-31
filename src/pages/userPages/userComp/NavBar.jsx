@@ -91,16 +91,21 @@ const NavBar = ({ hoverd }) => {
           </button>
         </div>
       </div>
-      <div className="md:hidden flex items-center ">
+      {!menuOpen && <div className="md:hidden flex items-center  ">
         <button
           onClick={() => setMenuOpen(!menuOpen)}
           className="text-2xl text-white focus:outline-none"
-        >{menuOpen ? <span className="text-3xl mr-4">&times; </span> : <span>&#9776;</span>}
+        > <span>&#9776;</span>
         </button>
-      </div>
+      </div>}
 
 
-      {menuOpen && < div className="flex md:hidden justify-between items-center w-full " >
+      {menuOpen && < div className="flex flex-col   bg-black gap-8 md:hidden justify-between items-center w-full " >
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="text-2xl text-white focus:outline-none"
+        ><span className="text-3xl mr-4">&times; </span>
+        </button>
         <Link
           to="/dashboard"
           className={`text-sm font-bold text-center hover:text-secondary ${hoverd === 1 ? "text-secondary" : ""

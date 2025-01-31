@@ -1,10 +1,11 @@
 import { useAuth } from "../../../context/AuthContext";
 import { useParams, Link } from "react-router-dom";
 import { getFirestore, doc, updateDoc, getDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import anonymous from "../../../assets/anonymous.png";
 import NavBar from "../userComp/NavBar";
-
+import { createPortal } from 'react-dom';
+import AllComments from "../userComp/AllComments";
 const BlogDetails = () => {
     const { currentUser } = useAuth();
     const { id } = useParams();
@@ -13,6 +14,8 @@ const BlogDetails = () => {
     const [loading, setLoading] = useState(false);
     const [commentState, setCommentState] = useState("");
     const [liked, setLiked] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const modalRef = useRef(null);
 
     const db = getFirestore();
 
@@ -96,7 +99,18 @@ const BlogDetails = () => {
         }
         setLoading(false);
     };
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            if (modalRef.current && !modalRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
 
+        if (isOpen) {
+            document.addEventListener("mousedown", handleOutsideClick);
+        }
+        return () => document.removeEventListener("mousedown", handleOutsideClick);
+    }, [isOpen]);
     useEffect(() => {
         if (currentUser?.uid) {
             fetchUser(currentUser.uid);
@@ -106,15 +120,17 @@ const BlogDetails = () => {
         }
     }, [currentUser, id]);
 
+
+
     if (!blog) {
         return <p className="text-white text-center mt-8">Loading Blog Details...</p>;
     }
 
     return (
-        <div className="flex flex-col md:flex-row min-h-screen bg-primary">
+        <div className="flex flex-col md:flex-row min-h-screen  bg-primary">
             <NavBar />
-            <div className="flex-1  md:p-16 bg-primary shadow-lg md:h-screen md:overflow-y-auto">
-                <div className="max-w-4xl mx-auto my-8 bg-gray-800 rounded-lg shadow-lg p-6">
+            <div className="flex-1  md:p-16 bg-primary shadow-lg  md:h-screen md:overflow-y-auto">
+                <div className="max-w-4xl w-full md:w-2/3 mx-auto my-8 bg-gray-800 rounded-lg shadow-lg p-6">
                     <div className="flex items-center gap-4 mb-6">
                         <img
                             src={blog.createdBy?.photo || anonymous}
@@ -131,12 +147,12 @@ const BlogDetails = () => {
                         alt="Blog Visual"
                         className="rounded-md w-full h-64 object-cover mb-6"
                     />
-                    <h1 className="text-3xl text-white font-bold mb-4">{blog.title}</h1>
-                    <p className="text-gray-300 mb-6 break-words">{blog.bigDescription}</p>
-                    <div className="pt-4 my-3 mb-10">
+                    <h1 className="text-xl text-white font-bold mb-4">{blog.title}</h1>
+                    <p className="text-gray-300 text-sm md:text-base mb-2 break-words">{blog.bigDescription}</p>
+                    <div className="pt-4  mb-4">
                         {blog.tags && blog.tags.map((b, index) => (
                             <div key={index} className="inline-block m-2 p-[2px] rounded-lg bg-gradient-to-r from-secondary to-green-500">
-                                <span className="block px-3 py-1 text-white font-semibold rounded-lg bg-gray-800">{b}</span>
+                                <span className="block px-2 py-1 text-white font-semibold rounded-lg bg-gray-800">{b}</span>
                             </div>
                         ))}
                     </div>
@@ -156,35 +172,53 @@ const BlogDetails = () => {
                     </div>
 
                     <h2 className="text-xl text-white font-semibold mb-4">Comments</h2>
-                    <div className="bg-gray-700 p-4 rounded-md mb-4">
-                        {blog.comments?.length > 0 ? (
-                            blog.comments.map((comment, index) => (
-                                <div key={index} className="flex items-start gap-4 mb-3">
+                    <div className="bg-gray-700 px-4 py-2 rounded-md mb-4">
+                        {blog.comments && blog.comments.length > 0 ? (
+                            blog.comments.slice(0, 3).map((comment, index) => (
+                                <div key={index} className="flex items-start gap-4 p-2 bg-gray-700  border-b-2 border-gray-600">
                                     <img
                                         src={comment.picture || anonymous}
-                                        alt="Comment Author"
+                                        alt="profile"
                                         className="w-10 h-10 rounded-full border-2 border-blue-500"
                                     />
                                     <div>
-                                        {comment.userId ? <Link to={`/profile/${comment.userId}`} className="text-sm text-gray-300 font-semibold hover:underline">{comment.name}</Link> : <p className="text-sm text-gray-300 font-semibold ">{comment.name}</p>}                                        <p className="text-gray-400">{comment.content}</p>
+                                        {comment.userId ? <Link to={`/profile/${comment.userId}`} className="text-sm text-gray-300 font-semibold hover:underline">{comment.name}</Link> : <p className="text-sm text-gray-300 font-semibold ">{comment.name}</p>}
+
+                                        <p className="text-sm text-gray-400 mt-1">{comment.content}</p>
                                     </div>
                                 </div>
+
                             ))
                         ) : (
-                            <p className="text-gray-500">No comments yet.</p>
+                            <p className="text-sm text-gray-500 italic text-center">
+                                No comments yet. Be the first to comment!
+                            </p>
+                        )}
+                        {blog.comments && blog.comments.length > 4 && (<button onClick={() => setIsOpen(true)} className=" self-center w-full  text-center pt-2 text-white text-sm font-medium">See all Comments</button>)}
+                        {isOpen && createPortal(
+                            <div className="fixed inset-0 flex   justify-center bg-black bg-opacity-50 z-50">
+                                <div ref={modalRef} className="bg-white overflow-auto w-[90%] my-2 md:w-1/2  p-6 pb-0 rounded-lg shadow-lg relative">
+                                    <div className="flex justify-between items-center">
+                                        <h2 className="text-xl font-bold">All comments</h2>
+                                        <button onClick={() => setIsOpen(false)} className="text-xl">X</button>
+                                    </div>
+                                    <AllComments blog={blog} />
+                                </div>
+                            </div>,
+                            document.body
                         )}
                     </div>
                     <form onSubmit={addComment} className="flex gap-4">
-                        <textarea
+                        <input
                             value={commentState}
                             onChange={(e) => setCommentState(e.target.value)}
                             placeholder="Write a comment..."
-                            className="w-full p-3 rounded-md bg-gray-800 border border-gray-700 text-gray-300"
+                            className="w-full p-2 md:p-3 rounded-md bg-gray-800 border border-gray-700 text-gray-300"
                         />
                         <button
                             type="submit"
                             disabled={loading}
-                            className="bg-blue-500 px-4 py-2 text-white rounded-md hover:bg-blue-600"
+                            className="bg-blue-500 px-4 py-1 text-white rounded-md hover:bg-blue-600"
                         >
                             Comment
                         </button>

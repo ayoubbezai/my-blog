@@ -38,9 +38,9 @@ const EditSkills = ({ fetchUserData, userData }) => {
     };
 
     return (
-        <div className="mb-8">
+        <div className="mb-2">
             <div className="flex items-center justify-between">
-                <h2 className="text-xl md:text-2xl font-bold text-white">
+                <h2 className="text-lg md:text-xl font-bold text-white">
                     Skills
                 </h2>
                 <PenIcon
@@ -49,7 +49,7 @@ const EditSkills = ({ fetchUserData, userData }) => {
                 />
             </div>
 
-            <div className="mt-4">
+            <div className="mt-2">
                 {isEditing ? (
                     <form className="flex flex-col space-y-4" onSubmit={updateSkills}>
                         <textarea
@@ -70,9 +70,9 @@ const EditSkills = ({ fetchUserData, userData }) => {
                         {userData?.skillsList && userData.skillsList.map((skill, index) => (
                             <div
                                 key={index}
-                                className="m-2 p-[2px] rounded-lg bg-gradient-to-r from-secondary to-green-500"
+                                className="m-2 mt-3 p-[2px] rounded-lg bg-gradient-to-r from-secondary to-green-500"
                             >
-                                <span className="block px-4 py-2 text-white font-medium rounded-lg bg-gray-800">
+                                <span className="block px-3 py-1 text-white font-medium rounded-lg bg-gray-800">
                                     {skill}
                                 </span>
                             </div>

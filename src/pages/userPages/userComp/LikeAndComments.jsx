@@ -22,7 +22,7 @@ const LikeAndComments = ({ blog, setLimitBlogs, limitBlogs }) => {
     const handlelike = async (id) => {
         setLoading(true);
         try {
-            await like(id, currentUser, limitBlogs, user, setUser, setLiked, setLimitBlogs)
+            await like(id, currentUser, limitBlogs, user, setUser, setLiked, setLimitBlogs )
         } catch (error) {
             console.error("error", error)
         } finally {

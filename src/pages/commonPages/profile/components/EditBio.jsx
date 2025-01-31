@@ -38,9 +38,9 @@ const EditBio = ({ fetchUserData, userData }) => {
     };
 
     return (
-        <div className="mb-8">
+        <div className="my-8">
             <div className="flex items-center justify-between">
-                <h2 className="text-xl md:text-2xl font-bold text-white">
+                <h2 className="text-lg md:text-xl font-bold text-white">
                     Bio
                 </h2>
                 <PenIcon
@@ -49,7 +49,7 @@ const EditBio = ({ fetchUserData, userData }) => {
                 />
             </div>
 
-            <div className="mt-4">
+            <div className="mt-2">
                 {isEditing ? (
                     <form className="flex flex-col space-y-4" onSubmit={updateBio}>
                         <textarea
@@ -66,7 +66,7 @@ const EditBio = ({ fetchUserData, userData }) => {
                         </button>
                     </form>
                 ) : (
-                    <p className="text-lg text-gray-200 mt-2">
+                    <p className="text-base text-gray-200 mt-1">
                         {userData?.bio || "No bio available. Click the pen icon to add one!"}
                     </p>
                 )}

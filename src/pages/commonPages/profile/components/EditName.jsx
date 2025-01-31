@@ -38,18 +38,18 @@ const EditName = ({ fetchUserData, userData }) => {
     };
 
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col ">
             <div className="flex items-center justify-between">
-                <h1 className="text-xl md:text-2xl font-bold text-white">
+                <h2 className="text-lg md:text-xl  font-bold text-white">
                     User Name
-                </h1>
+                </h2>
                 <PenIcon
                     onClick={startEditing} // Initialize name and set editing mode
                     className="cursor-pointer hover:text-secondary transition"
                 />
             </div>
 
-            <div className="my-4">
+            <div className="my-2">
                 {isEditing ? (
                     <form onSubmit={updateName} className="w-full mt-4">
                         <textarea
@@ -66,7 +66,7 @@ const EditName = ({ fetchUserData, userData }) => {
                         </button>
                     </form>
                 ) : (
-                    <h2 className="text-lg md:text-xl font-medium text-gray-200">
+                    <h2 className="text-base font-medium text-gray-200">
                         {userData?.name || "Loading..."}
                     </h2>
                 )}

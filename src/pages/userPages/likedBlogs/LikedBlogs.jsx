@@ -44,12 +44,12 @@ const LikedBlogs = () => {
                 </div>
 
                 {/* Liked Blogs Grid */}
-                <div className="grid grid-cols-1 2xl:grid-cols-2 gap-y-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-8">
 
                     {memorizedBlogs.map((b) => (
                         <div
                             key={b.id}
-                            className="py-4 bg-gray-800 flex flex-col items-center gap-2 rounded-lg border-2 border-transparent shadow-lg hover:shadow-xl transition-shadow duration-300 sm:w-full px-6 md:px-4 lg:px-0 lg:w-2/3 mx-auto"
+                            className="py-4 bg-gray-800 flex flex-col items-center gap-2 rounded-lg border-2 border-transparent shadow-lg hover:shadow-xl transition-shadow duration-300 sm:w-full px-6 md:px-4 lg:px-0 lg:w-[85%] mx-auto"
                         >
                             <OneBlog blog={b} />
 

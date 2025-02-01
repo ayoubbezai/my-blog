@@ -70,9 +70,9 @@ const UsersBlogsCircle = () => {
         <div className="flex relative flex-col items-center mb-16 mt-12 md:mt-0 ">
             <div className="  w-72 md:w-72 md:h-72">
                 <Doughnut data={data} options={options} />
-                <span className="absolute text-xl font-semibold text-white top-2  sm:bottom-32 left-20 ">{blogCount}</span>
+                <span className="absolute text-xl font-semibold text-white top-0  sm:bottom-32 left-20 ">{blogCount}</span>
             </div>
-            <h2 className="text-xl font-semibold top-14  sm:bottom-1  left-10  absolute text-white ">User Blogs</h2>
+            <h2 className="text-xl font-semibold top-32  sm:bottom-1  left-10  absolute text-white ">User Blogs</h2>
         </div>
     );
 };

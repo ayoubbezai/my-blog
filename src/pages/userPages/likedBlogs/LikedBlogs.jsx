@@ -49,7 +49,7 @@ const LikedBlogs = () => {
                     {memorizedBlogs.map((b) => (
                         <div
                             key={b.id}
-                            className="py-4 bg-gray-800 flex flex-col items-center gap-2 rounded-lg border-2 border-transparent shadow-lg hover:shadow-xl transition-shadow duration-300 sm:w-full px-6 md:px-4 lg:px-0 mx-auto w-full lg:w-4/5 "
+                            className="py-4 bg-gray-800 flex flex-col items-center gap-2 rounded-lg border-2 border-transparent shadow-lg hover:shadow-xl transition-shadow duration-300 sm:w-full px-6 md:px-4  mx-auto w-full lg:w-4/5 "
                         >
                             <OneBlog blog={b} />
 

@@ -61,13 +61,13 @@ const UserBlogNumber = () => {
     };
     const getBlogs = async () => {
         const usersRef = collection(db, "blogs");
-        const q = query(usersRef, where("status", "==", "pending"));
+        const q = query(usersRef);
         const querySnapshot = await getDocs(q);
         setBlogsNumber(querySnapshot.size);
     };
     const getUserBlogs = async () => {
         const usersRef = collection(db, "newBlogs");
-        const q = query(usersRef);
+        const q = query(usersRef, where("status", "==", "pending"));
         const querySnapshot = await getDocs(q);
         setUserBlogs(querySnapshot.size);
     };
@@ -80,11 +80,11 @@ const UserBlogNumber = () => {
     }, []);
 
     return (
-        <div className="flex flex-col md:flex-row flex-wrap justify-around items-center mt-8">
+        <div className="flex flex-col sm:flex-row flex-wrap justify-around items-center mt-8">
             <Card title="Number of Users" value={animatedUsers} backgroundColor="bg-green-500" textColor="text-white" />
             <Card title="Number of Admins" value={animatedAdmins} backgroundColor="bg-blue-500" textColor="text-white" />
             <Card title="Number of Blogs" value={animatedBlogs} backgroundColor="bg-yellow-500" textColor="text-black" />
-            <Card title="Blogs of Users" value={animatedUserBlogs} backgroundColor="bg-purple-500" textColor="text-white" />
+
         </div>
     );
 };

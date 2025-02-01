@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import NavBar from "../userComp/NavBar";
 import { fetchBlogsByIds } from "../../../utils/helpers";
@@ -8,7 +8,6 @@ const MyBlogs = () => {
     const { fetchUserData, userData } = useAuth();
     const myBlogsId = userData?.myBlogs;
     const [myBlogs, setMyBlogs] = useState([]);
-    const memorizedBlogs = useMemo(() => myBlogs, [myBlogs]);
 
     useEffect(() => {
         fetchUserData(); // Fetch user data to get liked blogs
@@ -37,12 +36,12 @@ const MyBlogs = () => {
             <NavBar hoverd={4} />
             <div className="flex-1 p-8 md:p-16 bg-primary shadow-lg md:h-screen md:overflow-y-auto">
                 <h1 className="text-4xl font-bold text-center bg-gradient-to-r from-secondary to-green-500 text-transparent bg-clip-text mb-10">
-                    {memorizedBlogs.length > 0 ? "My Blogs" : "You don't publish any blog"}
+                    {myBlogs.length > 0 ? "My Blogs" : "You don't publish any blog"}
                 </h1>
 
                 {/* Liked Blogs Grid */}
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-y-8">
-                    {memorizedBlogs.map((b) => (
+                    {myBlogs.map((b) => (
                         <div
                             key={b.id}
                             className="py-4 bg-gray-800 flex flex-col items-center gap-4 rounded-lg border-2 border-transparent shadow-lg hover:shadow-xl transition-shadow duration-300 sm:w-full px-6 md:px-4 lg:px-0 lg:w-[85%] mx-auto"

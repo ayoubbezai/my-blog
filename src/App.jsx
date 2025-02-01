@@ -16,6 +16,7 @@ import LikedBlogs from "./pages/userPages/likedBlogs/LikedBlogs"
 import MyBlogs from "./pages/userPages/MyBlogs/MyBlogs"
 import SearchBlog from "./pages/userPages/searchedBlogs/SearchBlog";
 import UsersMangment from "./pages/adminPages/usersList/UsersMangment";
+import UsersBlogs from "./pages/adminPages/UsersBlogs/UsersBlogs";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
           <Route element={<ProtectedRouteAdmin />}>
             <Route path="/blogsedit" element={<BlogsEdit />} />
             <Route path="/users" element={<UsersMangment />} />
+            <Route path="/usersBlogs" element={<UsersBlogs />} />
 
           </Route>
 

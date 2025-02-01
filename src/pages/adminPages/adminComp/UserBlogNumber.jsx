@@ -7,7 +7,7 @@ const Card = ({ title, value, backgroundColor, textColor }) => {
     return (
         <div className={`bg-${backgroundColor} ${textColor} p-6 rounded-lg shadow-md mt-4 text-center `}>
             <h3 className="text-lg md:text-xl font-semibold">{title}</h3>
-            <p className="text-xl md:text-3xl font-bold ">{value}</p>
+            <p className="text-xl md:text-3xl font-bold  ">{value}</p>
         </div>
     );
 };
@@ -57,7 +57,7 @@ const UserBlogNumber = () => {
             <Card title="Number of Users" value={usersNumber} backgroundColor="green-500" textColor="text-white" />
             <Card title="Number of Admins" value={adminNumber} backgroundColor="blue-500" textColor="text-white" />
             <Card title="Number of Blogs" value={blogsNumber} backgroundColor="yellow-500" textColor="text-black" />
-            <Card title="Blogs of Users" value={userBlogs} backgroundColor="purple-600" textColor="text-white" />
+            <Card title="Blogs of Users" value={userBlogs} backgroundColor="[#ec4899]" textColor="text-white" />
         </div>
     );
 };

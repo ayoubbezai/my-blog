@@ -52,7 +52,7 @@ const UserBlogNumber = () => {
     }, []);
 
     return (
-        <div className="flex flex-wrap justify-around items-center mt-8">
+        <div className="flex flex-col md:flex-row flex-wrap justify-around items-center mt-8">
             {/* Reusable Cards */}
             <Card title="Number of Users" value={usersNumber} backgroundColor="green-500" textColor="text-white" />
             <Card title="Number of Admins" value={adminNumber} backgroundColor="blue-500" textColor="text-white" />

@@ -131,7 +131,7 @@ const BlogDetails = () => {
         <div className="flex flex-col md:flex-row min-h-screen  bg-primary">
             {user.role === "admin" && <NavBarAdmin />}
             {user.role === "user" && <NavBarUser />}
-            <div className="flex-1  md:p-16 bg-primary shadow-lg  md:h-screen md:overflow-y-auto">
+            <div className="flex-1  md:p-8 bg-primary shadow-lg  md:h-screen md:overflow-y-auto">
                 <div className="max-w-4xl w-full md:w-2/3 mx-auto my-6 bg-gray-800 rounded-lg shadow-lg p-6 py-4">
                     <div className="flex items-center gap-4 mb-2">
                         <img

@@ -7,7 +7,7 @@ import { fetchUser } from "@/utils/helpers";
 
 const db = getFirestore();
 
-const AllComments = ({ blog }) => {
+const AllComments = ({ blog, modalRef, setIsOpen }) => {
     const [visibleCount, setVisibleCount] = useState(4);
     const [loading, setLoading] = useState(false);
     const [commentState, setCommentState] = useState("");
@@ -75,7 +75,7 @@ const AllComments = ({ blog }) => {
                     <div ref={modalRef} className="bg-white overflow-auto w-[90%] my-2 md:w-2/3 p-6 pb-0 rounded-lg shadow-lg relative">
                         <div className="flex justify-between items-center">
                             <h2 className="text-xl font-bold">Add a New Blog</h2>
-                            <Button onClick={() => setIsOpen(false)} className="text-xl">X</Button>
+                            <button onClick={() => setIsOpen(false)} className="text-xl">X</button>
                         </div>
                 <div className="h-[50%]">
                     <div className="mt-4   max-h-96 overflow-auto  bg-gray-200 p-4 rounded-lg shadow-md">

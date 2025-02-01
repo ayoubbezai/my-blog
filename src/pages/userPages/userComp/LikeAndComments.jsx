@@ -127,7 +127,7 @@ const LikeAndComments = ({ blog, setLimitBlogs, limitBlogs }) => {
                                     <h2 className="text-xl font-bold">All comments</h2>
                                     <button onClick={() => setIsOpen(false)} className="text-xl">X</button>
                                 </div>
-                                <AllComments blog={blog} />
+                                <AllComments blog={blog} modalRef={modalRef} setIsOpen={setIsOpen}  />
                             </div>
                         </div>,
                         document.body

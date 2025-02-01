@@ -12,12 +12,40 @@ const Card = ({ title, value, backgroundColor, textColor }) => {
     );
 };
 
+const useAnimatedNumber = (target) => {
+    const [currentValue, setCurrentValue] = useState(0);
+
+    useEffect(() => {
+        let start = 0;
+        const duration = 1000; // 1 second
+        const increment = target / (duration / 16); // Roughly 60fps
+
+        const animate = () => {
+            start += increment;
+            if (start >= target) {
+                setCurrentValue(target);
+            } else {
+                setCurrentValue(Math.floor(start));
+                requestAnimationFrame(animate);
+            }
+        };
+
+        animate();
+    }, [target]);
+
+    return currentValue;
+};
 
 const UserBlogNumber = () => {
     const [usersNumber, setUsersNumber] = useState(0);
     const [adminNumber, setAdminNumber] = useState(0);
     const [blogsNumber, setBlogsNumber] = useState(0);
     const [userBlogs, setUserBlogs] = useState(0);
+
+    const animatedUsers = useAnimatedNumber(usersNumber);
+    const animatedAdmins = useAnimatedNumber(adminNumber);
+    const animatedBlogs = useAnimatedNumber(blogsNumber);
+    const animatedUserBlogs = useAnimatedNumber(userBlogs);
 
     const getUsers = async () => {
         const usersRef = collection(db, "users");
@@ -53,11 +81,10 @@ const UserBlogNumber = () => {
 
     return (
         <div className="flex flex-col md:flex-row flex-wrap justify-around items-center mt-8">
-            {/* Reusable Cards */}
-            <Card title="Number of Users" value={usersNumber} backgroundColor="bg-green-500" textColor="text-white" />
-            <Card title="Number of Admins" value={adminNumber} backgroundColor="bg-blue-500" textColor="text-white" />
-            <Card title="Number of Blogs" value={blogsNumber} backgroundColor="bg-yellow-500" textColor="text-black" />
-            <Card title="Blogs of Users" value={userBlogs} backgroundColor="bg-purple-500" textColor="text-white" />
+            <Card title="Number of Users" value={animatedUsers} backgroundColor="bg-green-500" textColor="text-white" />
+            <Card title="Number of Admins" value={animatedAdmins} backgroundColor="bg-blue-500" textColor="text-white" />
+            <Card title="Number of Blogs" value={animatedBlogs} backgroundColor="bg-yellow-500" textColor="text-black" />
+            <Card title="Blogs of Users" value={animatedUserBlogs} backgroundColor="bg-purple-500" textColor="text-white" />
         </div>
     );
 };

@@ -72,7 +72,7 @@ const UsersBlogsCircle = () => {
                 <Doughnut data={data} options={options} />
             </div>
             <span className="absolute text-xl font-semibold text-white top-16   sm:bottom-32 left-20 ">{blogCount}</span>
-            <h2 className="text-xl font-semibold top-24 sm:bottom-1  left-10  absolute text-white ">User Blogs</h2>
+            <h2 className="text-xl font-semibold top-36 sm:bottom-1  left-10  absolute text-white ">User Blogs</h2>
         </div>
     );
 };

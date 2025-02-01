@@ -132,15 +132,15 @@ const BlogDetails = () => {
             {user.role === "admin" && <NavBarAdmin />}
             {user.role === "user" && <NavBarUser />}
             <div className="flex-1  md:p-16 bg-primary shadow-lg  md:h-screen md:overflow-y-auto">
-                <div className="max-w-4xl w-full md:w-2/3 mx-auto my-8 bg-gray-800 rounded-lg shadow-lg p-6">
-                    <div className="flex items-center gap-4 mb-6">
+                <div className="max-w-4xl w-full md:w-2/3 mx-auto my-6 bg-gray-800 rounded-lg shadow-lg p-6 py-4">
+                    <div className="flex items-center gap-4 mb-2">
                         <img
                             src={blog.createdBy?.photo || anonymous}
                             alt="Author"
-                            className="w-12 h-12 rounded-full border-2 border-gray-300"
+                            className="w-10 h-10 rounded-full border-2 border-gray-300"
                         />
                         <div>
-                            <p className="text-gray-100 text-sm md:text-base font-semibold">{blog.createdBy?.name || "Unknown Author"}</p>
+                            <p className="text-gray-100 text-sm font-semibold">{blog.createdBy?.name || "Unknown Author"}</p>
                             <p className="text-gray-400 text-sm">{blog.createdAt}</p>
                         </div>
                     </div>
@@ -149,8 +149,8 @@ const BlogDetails = () => {
                         alt="Blog Visual"
                         className="rounded-md w-full h-64 object-cover mb-6"
                     />
-                    <h1 className="text-xl text-white font-bold mb-4">{blog.title}</h1>
-                    <p className="text-gray-300 text-sm md:text-base mb-2 break-words">{blog.bigDescription}</p>
+                    <h1 className="text-lg text-white font-bold mb-4">{blog.title}</h1>
+                    <p className="text-gray-300 text-sm  mb-2 break-words">{blog.bigDescription}</p>
                     <div className="pt-4  mb-4">
                         {blog.tags && blog.tags.map((b, index) => (
                             <div key={index} className="inline-block m-2 p-[2px] rounded-lg bg-gradient-to-r from-secondary to-green-500">

@@ -61,7 +61,7 @@ const UserBlogNumber = () => {
     };
     const getBlogs = async () => {
         const usersRef = collection(db, "blogs");
-        const q = query(usersRef);
+        const q = query(usersRef, where("status", "==", "pending"));
         const querySnapshot = await getDocs(q);
         setBlogsNumber(querySnapshot.size);
     };

@@ -57,9 +57,9 @@ const SearchBlog = () => {
                 </h1>
                 {filtredBlogs.length > 0 ? (
                     filtredBlogs.map((blog) => (
-                        <div key={blog.id} className="border-2 border-gray-600 bg-gray-800 shadow-2xl md:rounded-lg mb-8">
+                        <div key={blog.id} className="border-2 border-gray-600 bg-gray-800 shadow-2xl lg:w-2/3 mx-auto md:rounded-lg mb-8">
                             <BlogHeader blog={blog} />
-                            <div className="relative p-6 rounded-lg shadow-lg flex flex-col md:flex-row gap-8 md:gap-16">
+                            <div className="relative p-6 rounded-lg shadow-lg flex flex-col md:gap-2">
                                 <OneBlog blog={blog} />
                             </div>
                         </div>

@@ -121,8 +121,8 @@ const AllBlogs = () => {
                 {limitBlogs.map((blog) => (
                     <div key={blog.id} className="border-2 border-gray-600 bg-gray-800 shadow-2xl md:rounded-lg w-full lg:w-4/5 mx-auto">
                         <BlogHeader blog={blog} />
-                        <div className="relative p-6 rounded-lg shadow-lg flex flex-col lg:flex-row">
-                            <div className="flex flex-col lg:w-2/3">
+                        <div className="relative p-6 rounded-lg gap-6 shadow-lg flex flex-col lg:flex-row">
+                            <div className="flex flex-col  lg:w-2/3">
                                 <OneBlog blog={blog} />
                             </div>
                             <LikeAndComments blog={blog} setLimitBlogs={setLimitBlogs} limitBlogs={limitBlogs} />

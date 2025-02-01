@@ -4,7 +4,7 @@ import { getFirestore, doc, updateDoc, getDoc } from "firebase/firestore";
 import { useEffect, useState, useRef } from "react";
 import anonymous from "../../../assets/anonymous.png";
 import NavBarUser from "../userComp/NavBar";
-import NavBarAdmin from "../../adminPages/adminComp/NavBar";
+import NavBarAdmin from "../../adminPages/adminComp/Navbar";
 import { createPortal } from 'react-dom';
 import AllComments from "../userComp/AllComments";
 const BlogDetails = () => {

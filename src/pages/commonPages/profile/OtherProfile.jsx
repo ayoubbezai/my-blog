@@ -1,18 +1,23 @@
 import { useAuth } from "../../../context/AuthContext";
 import { getFirestore, collection, getDoc, doc } from "firebase/firestore";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { useEffect, useState } from "react";
 import NavbarAdmin from "../../adminPages/adminComp/Navbar";
 import NavbarUser from "../../userPages/userComp/NavBar";
+import { time } from "framer-motion";
 
 const db = getFirestore();
 const collectionRef = collection(db, "users");
 
 const OtherProfile = () => {
-    const { fetchUserData, userData } = useAuth();
+    const { fetchUserData, userData , currentUser } = useAuth();
     const [profileData, setProfileData] = useState();
     const { profile } = useParams();
+    const nav = useNavigate();
+    if (profile === currentUser.uid) {
+        nav("/profile");
+    }
 
     const getProfile = async (profileId) => {
         try {
@@ -30,7 +35,10 @@ const OtherProfile = () => {
     };
 
     useEffect(() => {
-        getProfile(profile);
+        setTimeout(() => {
+            
+            getProfile(profile);
+        }, 1000);
         fetchUserData();
     }, []);
 

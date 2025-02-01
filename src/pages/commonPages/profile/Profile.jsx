@@ -19,7 +19,7 @@ const Profile = () => {
     return (
         <div className="h-screen bg-primary md:flex">
             {/* Navbar */}
-            {userData.role === "admin" && <NavbarAdmin hoverd={3} />}
+            {userData.role === "admin" && <NavbarAdmin hoverd={5} />}
             {userData.role === "user" && <NavbarUser hoverd={5} />}
 
             {/* Main Content */}

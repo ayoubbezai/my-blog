@@ -3,7 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import { getFirestore, doc, updateDoc, getDoc } from "firebase/firestore";
 import { useEffect, useState, useRef } from "react";
 import anonymous from "../../../assets/anonymous.png";
-import NavBar from "../userComp/NavBar";
+import NavBarUser from "../userComp/NavBar";
+import NavBarAdmin from "../../adminPages/adminComp/NavBar";
 import { createPortal } from 'react-dom';
 import AllComments from "../userComp/AllComments";
 const BlogDetails = () => {
@@ -128,7 +129,8 @@ const BlogDetails = () => {
 
     return (
         <div className="flex flex-col md:flex-row min-h-screen  bg-primary">
-            <NavBar />
+            {user.role === "admin" && <NavBarAdmin />}
+            {user.role === "user" && <NavBarUser />}
             <div className="flex-1  md:p-16 bg-primary shadow-lg  md:h-screen md:overflow-y-auto">
                 <div className="max-w-4xl w-full md:w-2/3 mx-auto my-8 bg-gray-800 rounded-lg shadow-lg p-6">
                     <div className="flex items-center gap-4 mb-6">

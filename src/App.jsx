@@ -30,6 +30,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/profile/:profile" element={<OtherProfile />} />
+            <Route path="/blog/:id" element={<BlogDetails />} />
 
           </Route>
           <Route element={<ProtectedRouteUser />}>
@@ -37,7 +38,6 @@ function App() {
             <Route path="/blogs/:query" element={<SearchBlog />} />
             <Route path="/likedblogs" element={<LikedBlogs />} />
             <Route path="/myblogs" element={<MyBlogs />} />
-            <Route path="/blog/:id" element={<BlogDetails />} />
 
           </Route>
           <Route element={<ProtectedRouteAdmin />}>

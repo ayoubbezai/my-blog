@@ -43,8 +43,12 @@ const PendingBlog = () => {
                 status: "accepted",
             });
 
-            // Add the approved blog to the "blogs" collection
-            await addDoc(collection(db, "blogs"), myBlogs.find((b) => b.id === id));
+            // Find the blog and remove the 'id' field before adding to the "blogs" collection
+            const blogToAdd = myBlogs.find((b) => b.id === id);
+            const { id: removedId, ...blogWithoutId } = blogToAdd;
+
+            // Add the approved blog (without the id) to the "blogs" collection
+            await addDoc(collection(db, "blogs"), blogWithoutId);
 
             // Remove the blog from the pending list
             setMyBlogs((prev) => prev.filter((b) => b.id !== id));
@@ -52,6 +56,7 @@ const PendingBlog = () => {
             console.log("Error approving blog:", error);
         }
     };
+
 
     // Refuse Blog: Update the status to refused
     const refuse = async (id) => {

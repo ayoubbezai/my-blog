@@ -38,7 +38,7 @@ const LikedBlogs = () => {
                     <div className="flex items-center gap-4 bg-gray-800 text-white px-6 py-4 rounded-lg shadow-lg">
                         <p className="text-lg font-semibold">Total Likes:</p>
                         <span className="text-3xl font-bold bg-gradient-to-r from-green-400 to-blue-500 text-transparent bg-clip-text">
-                            {likedBlogsId.length}
+                            {likedBlogs.length}
                         </span>
                     </div>
                 </div>

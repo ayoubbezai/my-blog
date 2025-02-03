@@ -118,7 +118,7 @@ const AllBlogs = () => {
             )}
 
             <div className="flex flex-col gap-12 md:px-8 py-12 md:p-12 md:mx-12">
-                {limitBlogs.map((blog) => (
+                {limitBlogs.filter((b) => b=="" ).map((blog) => (
                     <div key={blog.id} className="border-2 border-gray-600 bg-gray-800 shadow-2xl md:rounded-lg w-full lg:w-4/5 mx-auto">
                         <BlogHeader blog={blog} />
                         <div className="relative p-6 rounded-lg gap-6 shadow-lg flex flex-col lg:flex-row">

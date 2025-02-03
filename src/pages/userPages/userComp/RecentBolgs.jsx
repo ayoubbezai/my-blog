@@ -47,7 +47,7 @@ const RecentBlogs = () => {
             {!loading && (
                 <div className="py-12">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 p-6">
-                        {blogs?.length > 1 ? (
+                        {blogs?.length > 0 ? (
                             <>
                                 {/* Featured Blog */}
                                 <div className="col-span-1 row-span-2 p-4 flex flex-col gap-3 shadow-lg bg-primary rounded-lg">
@@ -73,7 +73,7 @@ const RecentBlogs = () => {
                                 </div>
 
                                 {/* Other Blogs */}
-                                {blogs?.slice(1, 3).map((blog) => (
+                                {blogs?.length > 1 && blogs?.slice(1, 3).map((blog) => (
                                     <div
                                         key={blog?.id}
                                         className="col-span-1 row-span-1 p-4 flex flex-col lg:flex-row gap-6 shadow-lg bg-primary rounded-lg"

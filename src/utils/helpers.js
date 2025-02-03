@@ -163,6 +163,7 @@ export const fetchLimitData = async (limitCount, startDoc = null) => {
   if (number < limitCount) {
     limitCount = number;
   }
+  console.log(number);
   try {
     let q = query(collectionBlogs, limit(limitCount));
     if (startDoc) {

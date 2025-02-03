@@ -22,7 +22,7 @@ const RecentBlogs = () => {
 
     // Helper function to truncate text
     const truncateText = (text, length) => {
-        return text.length > length ? `${text.substring(0, length)}...` : text;
+        return text?.length > length ? `${text?.substring(0, length)}...` : text;
     };
 
     return (
@@ -49,7 +49,7 @@ const RecentBlogs = () => {
             {!loading && (
                 <div className="py-12">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 p-6">
-                        {blogs?.length > 1 ? (
+                        {blogs && blogs?.length > 1 ? (
                             <>
                                 {/* Featured Blog */}
                                 <div className="col-span-1 row-span-2 p-4 flex flex-col gap-3 shadow-lg bg-primary rounded-lg">
@@ -63,7 +63,7 @@ const RecentBlogs = () => {
                                             className="h-56 md:h-64 object-cover rounded-lg"
                                         />
                                         <p className="text-sm sm:text-base md:text-base leading-loose text-white mt-3">
-                                            {truncateText(blogs[0]?.bigDescription, 200)}
+                                            {blogs[0]?.bigDescription && truncateText(blogs[0]?.bigDescription, 200)}
                                         </p>
                                         <Link
                                             to={`/blog/${blogs[0]?.id}`}

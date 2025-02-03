@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import {  fetchLimitData } from "../../../utils/helpers";
-
+import { fetchLimitData } from "../../../utils/helpers";
 
 const RecentBlogs = () => {
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
 
-
     // Fetch data on component mount
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const { data } = await fetchLimitData( 4 ); //fetchlimitblogs
+            const { data } = await fetchLimitData(4); // fetchlimitblogs
             setBlogs(data);
             setLoading(false);
         };
@@ -49,7 +47,7 @@ const RecentBlogs = () => {
             {!loading && (
                 <div className="py-12">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 p-6">
-                        {blogs && blogs?.length > 1 ? (
+                        {blogs?.length > 1 ? (
                             <>
                                 {/* Featured Blog */}
                                 <div className="col-span-1 row-span-2 p-4 flex flex-col gap-3 shadow-lg bg-primary rounded-lg">
@@ -77,23 +75,23 @@ const RecentBlogs = () => {
                                 {/* Other Blogs */}
                                 {blogs?.slice(1, 3).map((blog) => (
                                     <div
-                                        key={blog.id}
+                                        key={blog?.id}
                                         className="col-span-1 row-span-1 p-4 flex flex-col lg:flex-row gap-6 shadow-lg bg-primary rounded-lg"
                                     >
                                         <img
-                                            src={blog.imageUrl}
-                                            alt={blog.title}
+                                            src={blog?.imageUrl}
+                                            alt={blog?.title}
                                             className="w-full lg:w-2/5 h-32 md:h-40 object-cover rounded-lg"
                                         />
                                         <div className="flex flex-col gap-3 lg:w-3/5">
                                             <h2 className="text-sm sm:text-base md:text-xl font-bold leading-snug text-white">
-                                                {blog.title}
+                                                {blog?.title}
                                             </h2>
                                             <p className="text-xs sm:text-base md:text-sm leading-loose text-white mt-2">
-                                                {truncateText(blog.bigDescription, 150)}
+                                                {truncateText(blog?.bigDescription, 150)}
                                             </p>
                                             <Link
-                                                to={`/blog/${blog.id}`}
+                                                to={`/blog/${blog?.id}`}
                                                 className="text-secondary text-base md:text-lg font-semibold hover:underline mt-2"
                                             >
                                                 Read more

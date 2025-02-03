@@ -151,8 +151,18 @@ export const comments = async (
   }
 };
 
-// Function to fetch limited data from a collection
+
+const getBlogs = async () => {
+        const usersRef = collection(db, "blogs");
+        const q = query(usersRef);
+        const querySnapshot = await getDocs(q);
+        return querySnapshot.size;
+    };
 export const fetchLimitData = async (limitCount, startDoc = null) => {
+  const number = await getBlogs();
+  if (number < limitCount) {
+    limitCount = number;
+  }
   try {
     let q = query(collectionBlogs, limit(limitCount));
     if (startDoc) {
